@@ -10,68 +10,39 @@
 <script src="supabase-config.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  body {
-    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-    background: #050510; color: #e2e8f0; min-height: 100vh; line-height: 1.5;
-    padding: 16px; padding-bottom: 60px;
-  }
+  body { font-family: system-ui, sans-serif; background: #050510; color: #e2e8f0; min-height: 100vh; padding: 16px; }
   .wrap { max-width: 480px; margin: 0 auto; }
   header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
-  header h1 {
-    font-size: 22px; flex: 1;
-    background: linear-gradient(90deg, #38bdf8, #7c3aed, #2dffb3);
-    -webkit-background-clip: text; background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  .back {
-    background: rgba(30,41,59,0.6); border: 1px solid rgba(56,189,248,0.3);
-    color: #e2e8f0; padding: 8px 14px; border-radius: 20px;
-    font-size: 13px; font-weight: 700; text-decoration: none;
-  }
-  .card {
-    background: rgba(20,25,45,0.65); border: 1px solid rgba(56,189,248,0.18);
-    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-    border-radius: 16px; padding: 16px; margin-bottom: 14px;
-  }
+  header h1 { font-size: 22px; flex: 1; background: linear-gradient(90deg, #38bdf8, #7c3aed, #2dffb3); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+  .back { background: rgba(30,41,59,0.6); border: 1px solid rgba(56,189,248,0.3); color: #e2e8f0; padding: 8px 14px; border-radius: 20px; font-size: 13px; font-weight: 700; text-decoration: none; }
+  
+  /* Tabs */
+  .tabs { display: flex; gap: 10px; margin-bottom: 16px; }
+  .tab { flex: 1; padding: 12px; text-align: center; background: rgba(20,25,45,0.6); border: 1px solid rgba(56,189,248,0.2); border-radius: 12px; color: #94a3b8; font-weight: 700; cursor: pointer; }
+  .tab.active { background: rgba(56,189,248,0.15); border-color: #38bdf8; color: #38bdf8; }
+
+  .card { background: rgba(20,25,45,0.65); border: 1px solid rgba(56,189,248,0.18); backdrop-filter: blur(14px); border-radius: 16px; padding: 16px; margin-bottom: 14px; display: none; }
+  .card.active { display: block; }
+  
   .label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 8px; }
   .row { display: flex; gap: 8px; }
-  input[type=text] {
-    flex: 1; padding: 11px 13px; border-radius: 10px;
-    border: 1px solid rgba(56,189,248,0.3); background: rgba(5,5,16,0.7);
-    color: #f1f5f9; font-size: 14px; outline: none;
-  }
-  input[type=text]:focus { border-color: #38bdf8; }
-  button {
-    padding: 11px 16px; border: none; border-radius: 10px;
-    background: linear-gradient(135deg, #38bdf8, #7c3aed); color: #050510;
-    font-size: 14px; font-weight: 800; cursor: pointer;
-  }
-  button:active { transform: scale(0.97); }
+  input[type=text] { flex: 1; padding: 11px 13px; border-radius: 10px; border: 1px solid rgba(56,189,248,0.3); background: rgba(5,5,16,0.7); color: #f1f5f9; font-size: 14px; outline: none; }
+  button { padding: 11px 16px; border: none; border-radius: 10px; background: linear-gradient(135deg, #38bdf8, #7c3aed); color: #050510; font-size: 14px; font-weight: 800; cursor: pointer; }
   .status { font-size: 12px; color: #64748b; margin-top: 8px; }
-  .status.ok { color: #2dffb3; }
-  .status.err { color: #ff4d6d; }
-
+  .status.ok { color: #2dffb3; } .status.err { color: #ff4d6d; }
+  
   .lb-list { display: flex; flex-direction: column; gap: 8px; }
-  .lb-item {
-    display: flex; align-items: center; gap: 12px;
-    padding: 12px 14px; border-radius: 12px;
-    background: rgba(20,25,45,0.6); border: 1px solid rgba(56,189,248,0.1);
-  }
+  .lb-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 12px; background: rgba(20,25,45,0.6); border: 1px solid rgba(56,189,248,0.1); }
   .lb-item.me { border-color: #2dffb3; box-shadow: 0 0 14px rgba(45,255,179,0.2); }
-  .lb-rank {
-    font-size: 16px; font-weight: 900; min-width: 34px; text-align: center;
-    color: #94a3b8;
-  }
+  .lb-rank { font-size: 16px; font-weight: 900; min-width: 34px; text-align: center; color: #94a3b8; }
   .lb-rank.top1 { color: #fbbf24; text-shadow: 0 0 10px #fbbf24; }
-  .lb-rank.top2 { color: #cbd5e1; }
-  .lb-rank.top3 { color: #fb923c; }
   .lb-info { flex: 1; min-width: 0; }
   .lb-name { font-size: 15px; font-weight: 700; color: #f1f5f9; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .lb-meta { font-size: 11px; color: #64748b; margin-top: 2px; }
   .lb-xp { font-size: 15px; font-weight: 800; color: #38bdf8; text-align: right; }
   .lb-xp small { display: block; font-size: 10px; color: #64748b; font-weight: 600; }
-  .empty { text-align: center; padding: 40px 20px; color: #64748b; font-size: 14px; }
-  .loading { text-align: center; padding: 30px; color: #64748b; }
+  .squad-header { display: flex; justify-content: space-between; align-items: center; background: rgba(56,189,248,0.1); padding: 10px 14px; border-radius: 10px; margin-bottom: 10px; border: 1px dashed #38bdf8; }
+  .squad-code { font-size: 18px; font-weight: 900; letter-spacing: 2px; color: #2dffb3; }
 </style>
 </head>
 <body>
@@ -80,105 +51,139 @@
     <a href="./" class="back">← Back</a>
     <h1>🏆 Leaderboard</h1>
   </header>
+  
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('global')">🌍 Global</div>
+    <div class="tab" onclick="switchTab('squad')">👥 My Squad</div>
+  </div>
 
-  <div class="card">
+  <!-- Global Tab -->
+  <div id="tab-global" class="card active">
     <div class="label">Your Display Name</div>
     <div class="row">
       <input type="text" id="nameInput" placeholder="Your name" maxlength="20">
       <button onclick="saveName()">Save</button>
     </div>
-    <div class="status" id="status">Connecting…</div>
+    <div class="status" id="status-global">Connecting…</div>
+    <div class="label" style="margin-top:16px;">Top 100 Students</div>
+    <div id="lb-global" class="lb-list"><div class="status">Loading…</div></div>
   </div>
 
-  <div class="card">
-    <div class="label">Top 100 Students by XP</div>
-    <div id="leaderboard" class="lb-list">
-      <div class="loading">Loading…</div>
+  <!-- Squad Tab -->
+  <div id="tab-squad" class="card">
+    <div id="squad-setup">
+      <div class="label">Join or Create a Squad</div>
+      <div class="row" style="margin-bottom: 8px;">
+        <input type="text" id="joinCode" placeholder="Enter 6-letter code" maxlength="6" style="text-transform:uppercase">
+        <button onclick="joinSquad()">Join</button>
+      </div>
+      <div class="row">
+        <input type="text" id="newSquadName" placeholder="New Squad Name" maxlength="15">
+        <button onclick="createSquad()" style="background:linear-gradient(135deg,#2dffb3,#059669);color:#050510">Create</button>
+      </div>
+      <div class="status" id="status-squad"></div>
+    </div>
+    
+    <div id="squad-dashboard" style="display:none;">
+      <div class="squad-header">
+        <div>
+          <div style="font-size:12px;color:#94a3b8;">SQUAD CODE</div>
+          <div class="squad-code" id="mySquadCode"></div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:12px;color:#94a3b8;">SQUAD</div>
+          <div style="font-weight:800;font-size:16px;" id="mySquadName"></div>
+        </div>
+      </div>
+      <div class="label">Squad Leaderboard</div>
+      <div id="lb-squad" class="lb-list"></div>
     </div>
   </div>
 </div>
 
 <script>
-  var sb = null;
-  var myId = null;
-
-  function setStatus(msg, cls) {
-    var el = document.getElementById('status');
-    el.textContent = msg;
-    el.className = 'status' + (cls ? ' ' + cls : '');
+  var sb = null; var myId = null;
+  
+  function setStatus(id, msg, cls) { var el = document.getElementById(id); el.textContent = msg; el.className = 'status' + (cls ? ' ' + cls : ''); }
+  function switchTab(t) {
+    document.querySelectorAll('.tab').forEach(function(x){ x.classList.remove('active'); });
+    document.querySelectorAll('.card').forEach(function(x){ x.classList.remove('active'); });
+    document.querySelector('.tab[onclick*="'+t+'"]').classList.add('active');
+    document.getElementById('tab-'+t).classList.add('active');
+    if(t === 'squad') loadSquad();
   }
 
   async function init() {
-    if (!window.SUPABASE_URL || window.SUPABASE_URL === 'YOUR_URL') {
-      setStatus('⚠️ supabase-config.js में keys नहीं डाली', 'err');
-      return;
-    }
+    if (!window.SUPABASE_URL || window.SUPABASE_URL === 'YOUR_URL') { setStatus('status-global', '⚠️ keys missing', 'err'); return; }
     sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_KEY);
-
     try {
       var { data: sess } = await sb.auth.getSession();
-      if (!sess.session) {
-        var { data: anon, error } = await sb.auth.signInAnonymously();
-        if (error) { setStatus('Auth error: ' + error.message, 'err'); return; }
-        myId = anon.user.id;
-      } else {
-        myId = sess.session.user.id;
-      }
-      setStatus('✓ Connected as ' + myId.slice(0, 8), 'ok');
-
-      await sb.from('profiles').upsert({ id: myId }).select();
-
+      if (!sess.session) { var { data: anon } = await sb.auth.signInAnonymously(); myId = anon.user.id; }
+      else { myId = sess.session.user.id; }
+      setStatus('status-global', '✓ Connected', 'ok');
+      await sb.from('profiles').upsert({ id: myId });
       var { data: prof } = await sb.from('profiles').select('display_name').eq('id', myId).single();
-      if (prof && prof.display_name && !prof.display_name.startsWith('Anonymous')) {
-        document.getElementById('nameInput').value = prof.display_name;
-      }
-
-      loadLeaderboard();
-    } catch (e) {
-      setStatus('Error: ' + e.message, 'err');
-    }
+      if (prof && prof.display_name && !prof.display_name.startsWith('Anonymous')) document.getElementById('nameInput').value = prof.display_name;
+      loadGlobal();
+    } catch (e) { setStatus('status-global', 'Error', 'err'); }
   }
 
   async function saveName() {
     var name = document.getElementById('nameInput').value.trim();
-    if (name.length < 2) { setStatus('Name must be 2-20 characters', 'err'); return; }
-    setStatus('Saving…');
-    var { data, error } = await sb.rpc('set_display_name', { p_name: name });
-    if (error || !data.ok) {
-      setStatus('Error: ' + (error ? error.message : data.error), 'err');
-      return;
-    }
-    setStatus('✓ Name saved!', 'ok');
-    loadLeaderboard();
+    if (name.length < 2) { setStatus('status-global', 'Name too short', 'err'); return; }
+    setStatus('status-global', 'Saving…');
+    var { error } = await sb.rpc('set_display_name', { p_name: name });
+    if (error) { setStatus('status-global', 'Error', 'err'); return; }
+    setStatus('status-global', '✓ Saved!', 'ok'); loadGlobal(); loadSquad();
   }
 
-  async function loadLeaderboard() {
-    var el = document.getElementById('leaderboard');
+  async function loadGlobal() {
     var { data, error } = await sb.rpc('get_leaderboard');
-    if (error) {
-      el.innerHTML = '<div class="empty">Error: ' + error.message + '</div>';
-      return;
-    }
-    if (!data || data.length === 0) {
-      el.innerHTML = '<div class="empty">No players yet.<br>Be the first to log a class!</div>';
-      return;
-    }
-    el.innerHTML = data.map(function (row) {
-      var rank = parseInt(row.rank, 10);
-      var rankClass = rank === 1 ? 'top1' : rank === 2 ? 'top2' : rank === 3 ? 'top3' : '';
-      var isMe = row.id === myId ? ' me' : '';
-      var medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '#' + rank;
-      var safe = (row.display_name || 'Anonymous')
-        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-      return '<div class="lb-item' + isMe + '">' +
-        '<div class="lb-rank ' + rankClass + '">' + medal + '</div>' +
-        '<div class="lb-info">' +
-          '<div class="lb-name">' + safe + '</div>' +
-          '<div class="lb-meta">Level ' + row.level + '</div>' +
-        '</div>' +
-        '<div class="lb-xp">' + row.xp + '<small>XP</small></div>' +
-      '</div>';
+    if (error || !data) return;
+    document.getElementById('lb-global').innerHTML = data.map(function (row) {
+      var r = parseInt(row.rank), cls = r===1?'top1':r===2?'top2':r===3?'top3':'';
+      var medal = r===1?'🥇':r===2?'🥈':r===3?'🥉':'#'+r;
+      var me = row.id === myId ? ' me' : '';
+      return '<div class="lb-item'+me+'"><div class="lb-rank '+cls+'">'+medal+'</div><div class="lb-info"><div class="lb-name">'+row.display_name+'</div><div class="lb-meta">Level '+row.level+'</div></div><div class="lb-xp">'+row.xp+'<small>XP</small></div></div>';
     }).join('');
+  }
+
+  async function createSquad() {
+    var name = document.getElementById('newSquadName').value.trim();
+    if (name.length < 3) { setStatus('status-squad', 'Squad name too short', 'err'); return; }
+    setStatus('status-squad', 'Creating…');
+    var { data, error } = await sb.rpc('create_squad', { p_name: name });
+    if (error || !data.ok) { setStatus('status-squad', 'Error: '+(error?error.message:data.error), 'err'); return; }
+    setStatus('status-squad', '✓ Squad Created! Code: '+data.code, 'ok'); loadSquad();
+  }
+
+  async function joinSquad() {
+    var code = document.getElementById('joinCode').value.trim().toUpperCase();
+    if (code.length !== 6) { setStatus('status-squad', 'Code must be 6 chars', 'err'); return; }
+    setStatus('status-squad', 'Joining…');
+    var { data, error } = await sb.rpc('join_squad', { p_code: code });
+    if (error || !data.ok) { setStatus('status-squad', 'Error: '+(error?error.message:data.error), 'err'); return; }
+    setStatus('status-squad', '✓ Joined!', 'ok'); loadSquad();
+  }
+
+  async function loadSquad() {
+    var { data, error } = await sb.rpc('get_my_squad');
+    if (error) { setStatus('status-squad', 'Error loading squad', 'err'); return; }
+    if (!data.has_squad) {
+      document.getElementById('squad-setup').style.display = 'block';
+      document.getElementById('squad-dashboard').style.display = 'none';
+    } else {
+      document.getElementById('squad-setup').style.display = 'none';
+      document.getElementById('squad-dashboard').style.display = 'block';
+      document.getElementById('mySquadName').textContent = data.name;
+      document.getElementById('mySquadCode').textContent = data.code;
+      
+      document.getElementById('lb-squad').innerHTML = data.members.map(function (m, i) {
+        var medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':'#'+(i+1);
+        var cls = i===0?'top1':i===1?'top2':i===2?'top3':'';
+        return '<div class="lb-item'+(m.is_me?' me':'')+'"><div class="lb-rank '+cls+'">'+medal+'</div><div class="lb-info"><div class="lb-name">'+m.name+'</div><div class="lb-meta">Level '+m.level+'</div></div><div class="lb-xp">'+m.xp+'<small>XP</small></div></div>';
+      }).join('');
+    }
   }
 
   init();
