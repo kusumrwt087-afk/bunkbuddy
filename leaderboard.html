@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BunkBuddy — Leaderboard</title>
+<meta name="theme-color" content="#050510">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏆</text></svg>">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body {
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    background: #050510; color: #e2e8f0; min-height: 100vh; line-height: 1.5;
+    padding: 16px; padding-bottom: 60px;
+  }
+  .wrap { max-width: 480px; margin: 0 auto; }
+  header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+  header h1 {
+    font-size: 22px; flex: 1;
+    background: linear-gradient(90deg, #38bdf8, #7c3aed, #2dffb3);
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .back {
+    background: rgba(30,41,59,0.6); border: 1px solid rgba(56,189,248,0.3);
+    color: #e2e8f0; padding: 8px 14px; border-radius: 20px;
+    font-size: 13px; font-weight: 700; text-decoration: none;
+  }
+  .card {
+    background: rgba(20,25,45,0.65); border: 1px solid rgba(56,189,248,0.18);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-radius: 16px; padding: 16px; margin-bottom: 14px;
+  }
+  .label { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 8px; }
+  .row { display: flex; gap: 8px; }
+  input[type=text] {
+    flex: 1; padding: 11px 13px; border-radius: 10px;
+    border: 1px solid rgba(56,189,248,0.3); background: rgba(5,5,16,0.7);
+    color: #f1f5f9; font-size: 14px; outline: none;
+  }
+  input[type=text]:focus { border-color: #38bdf8; }
+  button {
+    padding: 11px 16px; border: none; border-radius: 10px;
+    background: linear-gradient(135deg, #38bdf8, #7c3aed); color: #050510;
+    font-size: 14px; font-weight: 800; cursor: pointer;
+  }
+  button:active { transform: scale(0.97); }
+  .status { font-size: 12px; color: #64748b; margin-top: 8px; }
+  .status.ok { color: #2dffb3; }
+  .status.err { color: #ff4d6d; }
+
+  .lb-list { display: flex; flex-direction: column; gap: 8px; }
+  .lb-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 14px; border-radius: 12px;
+    background: rgba(20,25,45,0.6); border: 1px solid rgba(56,189,248,0.1);
+  }
+  .lb-item.me { border-color: #2dffb3; box-shadow: 0 0 14px rgba(45,255,179,0.2); }
+  .lb-rank {
+    font-size: 16px; font-weight: 900; min-width: 34px; text-align: center;
+    color: #94a3b8;
+  }
+  .lb-rank.top1 { color: #fbbf24; text-shadow: 0 0 10px #fbbf24; }
+  .lb-rank.top2 { color: #cbd5e1; }
+  .lb-rank.top3 { color: #fb923c; }
+  .lb-info { flex: 1; min-width: 0; }
+  .lb-name { font-size: 15px; font-weight: 700; color: #f1f5f9; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .lb-meta { font-size: 11px; color: #64748b; margin-top: 2px; }
+  .lb-xp { font-size: 15px; font-weight: 800; color: #38bdf8; text-align: right; }
+  .lb-xp small { display: block; font-size: 10px; color: #64748b; font-weight: 600; }
+  .empty { text-align: center; padding: 40px 20px; color: #64748b; font-size: 14px; }
+  .loading { text-align: center; padding: 30px; color: #64748b; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a href="./" class="back">← Back</a>
+    <h1>🏆 Leaderboard</h1>
+  </header>
+
+  <div class="card">
+    <div class="label">Your Display Name</div>
+    <div class="row">
+      <input type="text" id="nameInput" placeholder="Your name" maxlength="20">
+      <button onclick="saveName()">Save</button>
+    </div>
+    <div class="status" id="status">Connecting…</div>
+  </div>
+
+  <div class="card">
+    <div class="label">Top 100 Students by XP</div>
+    <div id="leaderboard" class="lb-list">
+      <div class="loading">Loading…</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  var sb = null;
+  var myId = null;
+
+  function setStatus(msg, cls) {
+    var el = document.getElementById('status');
+    el.textContent = msg;
+    el.className = 'status' + (cls ? ' ' + cls : '');
+  }
+
+  async function init() {
+    if (!window.SUPABASE_URL || window.SUPABASE_URL === 'YOUR_URL') {
+      setStatus('⚠️ supabase-config.js में keys नहीं डाली', 'err');
+      return;
+    }
+    sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_KEY);
+
+    try {
+      var { data: sess } = await sb.auth.getSession();
+      if (!sess.session) {
+        var { data: anon, error } = await sb.auth.signInAnonymously();
+        if (error) { setStatus('Auth error: ' + error.message, 'err'); return; }
+        myId = anon.user.id;
+      } else {
+        myId = sess.session.user.id;
+      }
+      setStatus('✓ Connected as ' + myId.slice(0, 8), 'ok');
+
+      await sb.from('profiles').upsert({ id: myId }).select();
+
+      var { data: prof } = await sb.from('profiles').select('display_name').eq('id', myId).single();
+      if (prof && prof.display_name && !prof.display_name.startsWith('Anonymous')) {
+        document.getElementById('nameInput').value = prof.display_name;
+      }
+
+      loadLeaderboard();
+    } catch (e) {
+      setStatus('Error: ' + e.message, 'err');
+    }
+  }
+
+  async function saveName() {
+    var name = document.getElementById('nameInput').value.trim();
+    if (name.length < 2) { setStatus('Name must be 2-20 characters', 'err'); return; }
+    setStatus('Saving…');
+    var { data, error } = await sb.rpc('set_display_name', { p_name: name });
+    if (error || !data.ok) {
+      setStatus('Error: ' + (error ? error.message : data.error), 'err');
+      return;
+    }
+    setStatus('✓ Name saved!', 'ok');
+    loadLeaderboard();
+  }
+
+  async function loadLeaderboard() {
+    var el = document.getElementById('leaderboard');
+    var { data, error } = await sb.rpc('get_leaderboard');
+    if (error) {
+      el.innerHTML = '<div class="empty">Error: ' + error.message + '</div>';
+      return;
+    }
+    if (!data || data.length === 0) {
+      el.innerHTML = '<div class="empty">No players yet.<br>Be the first to log a class!</div>';
+      return;
+    }
+    el.innerHTML = data.map(function (row) {
+      var rank = parseInt(row.rank, 10);
+      var rankClass = rank === 1 ? 'top1' : rank === 2 ? 'top2' : rank === 3 ? 'top3' : '';
+      var isMe = row.id === myId ? ' me' : '';
+      var medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '#' + rank;
+      var safe = (row.display_name || 'Anonymous')
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      return '<div class="lb-item' + isMe + '">' +
+        '<div class="lb-rank ' + rankClass + '">' + medal + '</div>' +
+        '<div class="lb-info">' +
+          '<div class="lb-name">' + safe + '</div>' +
+          '<div class="lb-meta">Level ' + row.level + '</div>' +
+        '</div>' +
+        '<div class="lb-xp">' + row.xp + '<small>XP</small></div>' +
+      '</div>';
+    }).join('');
+  }
+
+  init();
+</script>
+</body>
+</html>
