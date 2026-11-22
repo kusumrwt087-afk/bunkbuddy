@@ -1,2 +1,2 @@
-window.SUPABASE_URL = 'https://rlekbbibfomdvmguoasn.supabase.co/rest/v1/';
+window.SUPABASE_URL = 'https://rlekbbibfomdvmguoasn.supabase.co';
 window.SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsZWtiYmliZm9tZHZtZ3VvYXNuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUzNDIzMzMsImV4cCI6MjExMDkxODMzM30.zp3VvIqjqInosROgPOZxX4T6WY9za7Un1OhMXoy6pRM';
