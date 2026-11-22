@@ -1,49 +1,96 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BunkBuddy — Free Attendance Calculator | Know How Many Classes You Can Bunk</title>
-  <meta name="description" content="Free attendance calculator for students. Know exactly how many classes you can bunk and still stay above 75%. No login, no ads, works offline.">
-  <meta property="og:title" content="BunkBuddy — Know before you bunk">
-  <meta property="og:description" content="Free attendance calculator. Track every subject, know exactly how many classes you can miss. No login. No ads. Works offline.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>BunkBuddy — Free Attendance Calculator</title>
+  <meta name="description" content="Free attendance calculator for students. Know exactly how many classes you can bunk and still stay above 75%.">
   <meta name="theme-color" content="#050510">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.json">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
   <style>
+    /* ===== THEME VARIABLES ===== */
+    :root, [data-theme="dark"] {
+      --bg: #050510;
+      --card: rgba(20, 25, 45, 0.65);
+      --text: #e2e8f0;
+      --text-dim: #94a3b8;
+      --text-sub: #64748b;
+      --accent: #38bdf8;
+      --accent-dim: #7dd3fc;
+      --purple: #7c3aed;
+      --mint: #2dffb3;
+      --red: #ff4d6d;
+      --orange: #ff9f1c;
+      --border: rgba(56, 189, 248, 0.18);
+      --border-strong: rgba(56, 189, 248, 0.4);
+      --shadow: rgba(0,0,0,0.5);
+      --input-bg: rgba(5,5,16,0.7);
+      --grid-line: rgba(124, 58, 237, 0.35);
+      --grid-opacity: 0.55;
+      --particle-opacity: 1;
+    }
+    [data-theme="light"] {
+      --bg: #eef2f7;
+      --card: rgba(255, 255, 255, 0.85);
+      --text: #0f172a;
+      --text-dim: #475569;
+      --text-sub: #64748b;
+      --accent: #0284c7;
+      --accent-dim: #0369a1;
+      --purple: #6d28d9;
+      --mint: #059669;
+      --red: #dc2626;
+      --orange: #ea580c;
+      --border: rgba(2, 132, 199, 0.25);
+      --border-strong: rgba(2, 132, 199, 0.5);
+      --shadow: rgba(15,23,42,0.15);
+      --input-bg: rgba(255,255,255,0.9);
+      --grid-line: rgba(109, 40, 217, 0.2);
+      --grid-opacity: 0.7;
+      --particle-opacity: 0.5;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     html, body { overflow-x: hidden; }
     body {
       font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-      background: #050510;
-      color: #e2e8f0;
+      background: var(--bg);
+      color: var(--text);
       min-height: 100vh;
       line-height: 1.5;
       position: relative;
+      transition: background 0.4s, color 0.4s;
+      padding-bottom: env(safe-area-inset-bottom);
     }
 
-    /* ===== 3D BACKGROUND ===== */
-    .bg-layer {
-      position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
-    }
+    /* ===== BACKGROUND ===== */
+    .bg-layer { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
     .bg-radial {
       position: absolute; inset: 0;
       background:
         radial-gradient(circle at 20% 10%, rgba(124, 58, 237, 0.25), transparent 45%),
-        radial-gradient(circle at 80% 90%, rgba(56, 189, 248, 0.22), transparent 50%),
-        radial-gradient(circle at 50% 50%, rgba(45, 255, 179, 0.06), transparent 60%);
+        radial-gradient(circle at 80% 90%, rgba(56, 189, 248, 0.22), transparent 50%);
+    }
+    [data-theme="light"] .bg-radial {
+      background:
+        radial-gradient(circle at 20% 10%, rgba(124, 58, 237, 0.12), transparent 45%),
+        radial-gradient(circle at 80% 90%, rgba(56, 189, 248, 0.15), transparent 50%);
     }
     .bg-grid {
       position: absolute; left: -50%; right: -50%; bottom: 0; height: 55vh;
       background-image:
-        linear-gradient(rgba(124, 58, 237, 0.35) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(124, 58, 237, 0.35) 1px, transparent 1px);
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
       background-size: 44px 44px;
       transform: perspective(420px) rotateX(62deg);
       transform-origin: center bottom;
       animation: gridMove 6s linear infinite;
       mask-image: linear-gradient(to top, #000 10%, transparent 95%);
       -webkit-mask-image: linear-gradient(to top, #000 10%, transparent 95%);
-      opacity: 0.55;
+      opacity: var(--grid-opacity);
     }
     @keyframes gridMove {
       0%   { background-position: 0 0, 0 0; }
@@ -51,8 +98,6 @@
     }
     .particle {
       position: absolute; border-radius: 50%;
-      background: #38bdf8;
-      box-shadow: 0 0 8px 2px rgba(56,189,248,0.6);
       animation: floatUp linear infinite;
       opacity: 0;
     }
@@ -66,13 +111,9 @@
     /* ===== APP ===== */
     .app { max-width: 480px; margin: 0 auto; padding: 16px; position: relative; z-index: 1; }
 
-    header {
-      display: flex; align-items: center; gap: 14px;
-      padding: 14px 4px 22px;
-    }
+    header { display: flex; align-items: center; gap: 12px; padding: 14px 4px 22px; }
     .logo-cube {
-      width: 48px; height: 48px;
-      position: relative;
+      width: 44px; height: 44px; position: relative;
       transform-style: preserve-3d;
       animation: cubeSpin 8s linear infinite;
       flex-shrink: 0;
@@ -80,25 +121,26 @@
     .logo-cube div {
       position: absolute; inset: 0;
       display: flex; align-items: center; justify-content: center;
-      font-size: 22px; font-weight: 900; color: #050510;
+      font-size: 20px; font-weight: 900; color: #050510;
       border: 1px solid rgba(56,189,248,0.7);
       box-shadow: inset 0 0 14px rgba(56,189,248,0.5);
       background: linear-gradient(135deg, #38bdf8, #7c3aed);
     }
-    .logo-cube .f1 { transform: translateZ(24px); }
-    .logo-cube .f2 { transform: rotateY(180deg) translateZ(24px); }
-    .logo-cube .f3 { transform: rotateY(90deg) translateZ(24px); }
-    .logo-cube .f4 { transform: rotateY(-90deg) translateZ(24px); }
-    .logo-cube .f5 { transform: rotateX(90deg) translateZ(24px); }
-    .logo-cube .f6 { transform: rotateX(-90deg) translateZ(24px); }
+    .logo-cube .f1 { transform: translateZ(22px); }
+    .logo-cube .f2 { transform: rotateY(180deg) translateZ(22px); }
+    .logo-cube .f3 { transform: rotateY(90deg) translateZ(22px); }
+    .logo-cube .f4 { transform: rotateY(-90deg) translateZ(22px); }
+    .logo-cube .f5 { transform: rotateX(90deg) translateZ(22px); }
+    .logo-cube .f6 { transform: rotateX(-90deg) translateZ(22px); }
     @keyframes cubeSpin {
       0%   { transform: rotateX(-18deg) rotateY(0deg); }
       100% { transform: rotateX(-18deg) rotateY(360deg); }
     }
 
+    .brand { flex: 1; min-width: 0; }
     .brand h1 {
-      font-size: 22px; font-weight: 800; letter-spacing: -0.5px;
-      background: linear-gradient(90deg, #38bdf8, #7c3aed, #2dffb3, #38bdf8);
+      font-size: 20px; font-weight: 800; letter-spacing: -0.5px;
+      background: linear-gradient(90deg, var(--accent), var(--purple), var(--mint), var(--accent));
       background-size: 300% 100%;
       -webkit-background-clip: text; background-clip: text;
       -webkit-text-fill-color: transparent; color: transparent;
@@ -106,106 +148,99 @@
     }
     @keyframes textShine { 0% { background-position: 0% 50%; } 100% { background-position: 300% 50%; } }
     .brand .tagline {
-      font-size: 12px; color: #7dd3fc; font-weight: 700;
-      letter-spacing: 1.5px; text-transform: uppercase;
-      margin-top: 2px;
+      font-size: 11px; color: var(--accent-dim); font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase; margin-top: 1px;
     }
 
-    .about-btn {
-      margin-left: auto;
-      background: rgba(30, 41, 59, 0.6);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(56,189,248,0.4);
-      color: #e2e8f0; padding: 9px 16px; border-radius: 20px;
-      font-size: 13px; font-weight: 700; cursor: pointer;
-      box-shadow: 0 0 14px rgba(56,189,248,0.15);
-      transition: all 0.25s;
+    .icon-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text); width: 38px; height: 38px;
+      border-radius: 50%; font-size: 16px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
     }
-    .about-btn:active { transform: scale(0.96); box-shadow: 0 0 20px rgba(56,189,248,0.4); }
+    .icon-btn:active { transform: scale(0.9); }
+    .icon-btn.active { border-color: var(--accent); box-shadow: 0 0 12px rgba(56,189,248,0.4); }
+    .icon-btn.pulse { animation: pulseGlow 1s ease-in-out infinite; }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 12px rgba(56,189,248,0.4); }
+      50% { box-shadow: 0 0 22px rgba(56,189,248,0.8); border-color: #38bdf8; }
+    }
 
-    /* ===== GLASS CARD BASE ===== */
+    /* ===== GLASS ===== */
     .glass {
-      background: rgba(20, 25, 45, 0.65);
+      background: var(--card);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
-      border: 1px solid rgba(56, 189, 248, 0.18);
+      border: 1px solid var(--border);
       border-radius: 18px;
-      box-shadow:
-        0 8px 32px rgba(0,0,0,0.5),
-        inset 0 1px 0 rgba(255,255,255,0.06);
+      box-shadow: 0 8px 32px var(--shadow), inset 0 1px 0 rgba(255,255,255,0.06);
       position: relative;
     }
     .glass::before {
-      content: "";
-      position: absolute; inset: -1px;
-      border-radius: 18px;
+      content: ""; position: absolute; inset: -1px; border-radius: 18px;
       padding: 1px;
       background: linear-gradient(135deg, rgba(56,189,248,0.5), transparent 40%, transparent 60%, rgba(124,58,237,0.5));
       -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-      -webkit-mask-composite: xor;
-              mask-composite: exclude;
-      pointer-events: none;
-      opacity: 0.7;
+      -webkit-mask-composite: xor; mask-composite: exclude;
+      pointer-events: none; opacity: 0.7;
     }
 
     /* ===== SUMMARY ===== */
     .summary {
-      padding: 22px 20px;
-      margin-bottom: 16px;
-      text-align: center;
+      padding: 22px 20px; margin-bottom: 14px; text-align: center;
       transform-style: preserve-3d;
       transition: transform 0.2s ease-out;
     }
-    .summary-label {
-      font-size: 11px; color: #94a3b8;
-      text-transform: uppercase; letter-spacing: 2px; font-weight: 700;
-    }
+    .summary-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
     .summary-percent {
-      font-size: 52px; font-weight: 900; letter-spacing: -2px;
-      margin: 6px 0;
-      text-shadow: 0 0 22px currentColor;
+      font-size: 48px; font-weight: 900; letter-spacing: -2px;
+      margin: 6px 0; text-shadow: 0 0 22px currentColor;
       transition: color 0.4s;
     }
-    .summary-sub { font-size: 13px; color: #94a3b8; }
+    .summary-sub { font-size: 13px; color: var(--text-dim); }
     .summary-badges { display: flex; gap: 8px; justify-content: center; margin-top: 14px; flex-wrap: wrap; }
-    .badge {
-      font-size: 12px; padding: 5px 12px; border-radius: 20px; font-weight: 700;
-      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-    }
-    .badge.green {
-      background: rgba(45,255,179,0.12); color: #2dffb3;
-      border: 1px solid rgba(45,255,179,0.35);
-      box-shadow: 0 0 12px rgba(45,255,179,0.25);
-    }
-    .badge.red {
-      background: rgba(255,77,109,0.12); color: #ff4d6d;
-      border: 1px solid rgba(255,77,109,0.4);
-      box-shadow: 0 0 12px rgba(255,77,109,0.25);
-    }
+    .badge { font-size: 12px; padding: 5px 12px; border-radius: 20px; font-weight: 700; }
+    .badge.green { background: rgba(45,255,179,0.12); color: var(--mint); border: 1px solid rgba(45,255,179,0.35); }
+    .badge.red { background: rgba(255,77,109,0.12); color: var(--red); border: 1px solid rgba(255,77,109,0.4); }
 
-    /* ===== TARGET ROW ===== */
-    .settings-row {
-      display: flex; align-items: center; gap: 10px;
-      padding: 14px 18px; margin-bottom: 18px;
+    /* ===== WEEKLY CHART ===== */
+    .weekly { padding: 16px 18px; margin-bottom: 14px; }
+    .weekly-header {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 12px; color: var(--text-dim); font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 10px;
     }
-    .settings-row label { font-size: 14px; color: #cbd5e1; font-weight: 600; flex: 1; }
+    .weekly-totals { font-size: 12px; text-transform: none; letter-spacing: 0; font-weight: 600; }
+    .weekly-chart { display: flex; gap: 6px; align-items: flex-end; }
+    .day-col { flex: 1; display: flex; flex-direction: column; }
+    .day-bar { display: flex; flex-direction: column-reverse; align-items: stretch; }
+    .bar-present { background: linear-gradient(180deg, #2dffb3, #059669); }
+    .bar-bunked { background: linear-gradient(180deg, #ff4d6d, #b91c1c); }
+    .bar-present, .bar-bunked { width: 100%; border-radius: 2px 2px 0 0; }
+    .day-label { font-size: 10px; text-align: center; color: var(--text-dim); margin-top: 4px; font-weight: 700; }
+    .weekly-empty { text-align: center; padding: 20px 0; color: var(--text-sub); font-size: 13px; }
+
+    /* ===== SETTINGS ===== */
+    .settings-row { display: flex; align-items: center; gap: 10px; padding: 14px 18px; margin-bottom: 18px; }
+    .settings-row label { font-size: 14px; color: var(--text); font-weight: 600; flex: 1; }
     .settings-row input {
       width: 76px; padding: 8px 10px; border-radius: 10px;
-      border: 1px solid rgba(56,189,248,0.4);
-      background: rgba(5,5,16,0.7); color: #38bdf8;
+      border: 1px solid var(--border-strong);
+      background: var(--input-bg); color: var(--accent);
       font-size: 16px; font-weight: 800; text-align: center; outline: none;
-      box-shadow: inset 0 0 10px rgba(56,189,248,0.1);
     }
-    .settings-row input:focus { border-color: #38bdf8; box-shadow: 0 0 14px rgba(56,189,248,0.4); }
-    .settings-row .suffix { font-size: 15px; color: #64748b; font-weight: 700; }
+    .settings-row input:focus { border-color: var(--accent); box-shadow: 0 0 14px rgba(56,189,248,0.4); }
+    .settings-row .suffix { font-size: 15px; color: var(--text-sub); font-weight: 700; }
 
     /* ===== SUBJECT CARD ===== */
     .subject-card {
-      padding: 18px;
-      margin-bottom: 14px;
+      padding: 18px; margin-bottom: 14px;
       transform-style: preserve-3d;
-      transition: transform 0.15s ease-out, box-shadow 0.3s;
+      transition: transform 0.15s ease-out;
       animation: cardIn 0.4s ease;
     }
     @keyframes cardIn {
@@ -213,199 +248,143 @@
       to   { opacity: 1; transform: translateY(0); }
     }
     .subject-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .subject-name { font-size: 17px; font-weight: 800; color: #f1f5f9; letter-spacing: -0.3px; }
+    .subject-name { font-size: 17px; font-weight: 800; color: var(--text); letter-spacing: -0.3px; }
     .delete-btn {
       background: rgba(255,77,109,0.1); border: 1px solid rgba(255,77,109,0.3);
-      color: #ff4d6d; font-size: 14px; cursor: pointer;
+      color: var(--red); font-size: 14px; cursor: pointer;
       padding: 6px 10px; border-radius: 8px; font-weight: 700;
-      transition: all 0.2s;
     }
-    .delete-btn:active { transform: scale(0.9); background: rgba(255,77,109,0.25); }
+    .delete-btn:active { transform: scale(0.9); }
 
     .subject-numbers { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
-    .subject-percent {
-      font-size: 26px; font-weight: 900;
-      text-shadow: 0 0 14px currentColor;
-      transition: color 0.3s;
-    }
-    .subject-count { font-size: 13px; color: #94a3b8; font-weight: 600; }
+    .subject-percent { font-size: 26px; font-weight: 900; text-shadow: 0 0 14px currentColor; }
+    .subject-count { font-size: 13px; color: var(--text-dim); font-weight: 600; }
 
-    /* 3D progress bar */
     .progress-bar {
-      height: 12px;
-      background: rgba(5,5,16,0.9);
-      border-radius: 8px;
-      position: relative;
-      margin-bottom: 12px;
-      overflow: visible;
-      box-shadow: inset 0 2px 6px rgba(0,0,0,0.8);
-      border: 1px solid rgba(56,189,248,0.15);
+      height: 12px; background: var(--input-bg); border-radius: 8px;
+      position: relative; margin-bottom: 12px;
+      box-shadow: inset 0 2px 6px rgba(0,0,0,0.5);
+      border: 1px solid var(--border);
     }
-    .progress-fill {
-      height: 100%; border-radius: 8px;
-      transition: width 0.6s cubic-bezier(.4,0,.2,1);
-      position: relative;
-    }
+    .progress-fill { height: 100%; border-radius: 8px; transition: width 0.6s cubic-bezier(.4,0,.2,1); position: relative; }
     .progress-fill::after {
-      content: ""; position: absolute; inset: 0;
-      border-radius: 8px;
+      content: ""; position: absolute; inset: 0; border-radius: 8px;
       background: linear-gradient(180deg, rgba(255,255,255,0.35), transparent 55%);
-      pointer-events: none;
     }
-    .bar-green {
-      background: linear-gradient(90deg, #059669, #2dffb3);
-      box-shadow: 0 0 12px rgba(45,255,179,0.55), 0 0 22px rgba(45,255,179,0.25);
-    }
-    .bar-red {
-      background: linear-gradient(90deg, #b91c1c, #ff4d6d);
-      box-shadow: 0 0 12px rgba(255,77,109,0.55), 0 0 22px rgba(255,77,109,0.25);
-    }
-    .target-marker {
-      position: absolute; top: -4px; bottom: -4px; width: 3px;
-      background: #fbbf24;
-      transform: translateX(-50%);
-      border-radius: 2px;
-      box-shadow: 0 0 10px #fbbf24;
-    }
+    .bar-green { background: linear-gradient(90deg, #059669, #2dffb3); box-shadow: 0 0 12px rgba(45,255,179,0.55); }
+    .bar-red { background: linear-gradient(90deg, #b91c1c, #ff4d6d); box-shadow: 0 0 12px rgba(255,77,109,0.55); }
+    .target-marker { position: absolute; top: -4px; bottom: -4px; width: 3px; background: #fbbf24; transform: translateX(-50%); border-radius: 2px; box-shadow: 0 0 10px #fbbf24; }
 
     .subject-advice { font-size: 13px; margin-bottom: 14px; font-weight: 700; }
+    .green { color: var(--mint); }
+    .red { color: var(--red); }
 
     .quick-row { display: flex; gap: 10px; }
     .quick-btn {
       flex: 1; padding: 13px; border-radius: 12px;
       font-size: 14px; font-weight: 800; cursor: pointer;
-      transition: transform 0.1s, box-shadow 0.25s, background 0.2s;
-      position: relative; overflow: hidden;
+      transition: transform 0.1s, box-shadow 0.25s;
       letter-spacing: 0.3px;
     }
     .quick-btn:active { transform: scale(0.96); }
     .green-btn {
       background: linear-gradient(135deg, rgba(45,255,179,0.2), rgba(5,150,105,0.25));
-      color: #2dffb3;
-      border: 1px solid rgba(45,255,179,0.45);
+      color: var(--mint); border: 1px solid rgba(45,255,179,0.45);
       box-shadow: 0 0 14px rgba(45,255,179,0.2);
     }
-    .green-btn:active { box-shadow: 0 0 22px rgba(45,255,179,0.5); }
     .red-btn {
       background: linear-gradient(135deg, rgba(255,77,109,0.2), rgba(185,28,28,0.25));
-      color: #ff4d6d;
-      border: 1px solid rgba(255,77,109,0.45);
+      color: var(--red); border: 1px solid rgba(255,77,109,0.45);
       box-shadow: 0 0 14px rgba(255,77,109,0.2);
     }
-    .red-btn:active { box-shadow: 0 0 22px rgba(255,77,109,0.5); }
 
-    /* ===== ADD BUTTON ===== */
+    /* ===== WHAT IF ===== */
+    .whatif {
+      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+      margin-top: 14px; padding-top: 12px;
+      border-top: 1px dashed var(--border);
+      font-size: 12px; color: var(--text-dim);
+    }
+    .whatif span:first-child { font-weight: 700; color: var(--text-sub); }
+    .whatif-input {
+      width: 54px; padding: 5px 6px; border-radius: 8px;
+      border: 1px solid var(--border); background: var(--input-bg);
+      color: var(--accent); font-size: 13px; font-weight: 800;
+      text-align: center; outline: none;
+    }
+    .whatif-input:focus { border-color: var(--accent); }
+    .whatif-result { font-weight: 800; font-size: 13px; margin-left: auto; }
+
+    /* ===== ADD BTN ===== */
     .add-btn {
       width: 100%; padding: 17px; margin-top: 10px;
-      border: 2px dashed rgba(56,189,248,0.35);
-      border-radius: 14px;
-      background: rgba(56,189,248,0.03);
-      color: #7dd3fc; font-size: 15px; font-weight: 800;
+      border: 2px dashed var(--border-strong);
+      border-radius: 14px; background: rgba(56,189,248,0.03);
+      color: var(--accent-dim); font-size: 15px; font-weight: 800;
       cursor: pointer; letter-spacing: 0.5px;
       transition: all 0.25s;
     }
-    .add-btn:active {
-      background: rgba(56,189,248,0.12);
-      box-shadow: 0 0 18px rgba(56,189,248,0.3);
-    }
+    .add-btn:active { background: rgba(56,189,248,0.12); box-shadow: 0 0 18px rgba(56,189,248,0.3); }
 
     /* ===== ADD FORM ===== */
-    .add-form {
-      padding: 18px; margin-top: 12px;
-    }
+    .add-form { padding: 18px; margin-top: 12px; }
     .add-form.hidden { display: none; }
-    .add-form label {
-      display: block; font-size: 11px; color: #94a3b8;
-      margin: 10px 0 5px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700;
-    }
+    .add-form label { display: block; font-size: 11px; color: var(--text-dim); margin: 10px 0 5px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
     .add-form input {
       width: 100%; padding: 12px; border-radius: 10px;
-      border: 1px solid rgba(56,189,248,0.3);
-      background: rgba(5,5,16,0.8);
-      color: #f1f5f9; font-size: 15px; outline: none;
-      transition: border 0.2s, box-shadow 0.2s;
+      border: 1px solid var(--border); background: var(--input-bg);
+      color: var(--text); font-size: 15px; outline: none;
     }
-    .add-form input:focus { border-color: #38bdf8; box-shadow: 0 0 12px rgba(56,189,248,0.3); }
+    .add-form input:focus { border-color: var(--accent); box-shadow: 0 0 12px rgba(56,189,248,0.3); }
     .form-row { display: flex; gap: 10px; }
     .form-row > div { flex: 1; }
     .form-buttons { display: flex; gap: 10px; margin-top: 16px; }
-    .form-buttons button {
-      flex: 1; padding: 12px; border: none; border-radius: 10px;
-      font-size: 15px; font-weight: 800; cursor: pointer;
-      transition: transform 0.1s, box-shadow 0.2s;
-    }
-    .form-buttons button:active { transform: scale(0.96); }
-    .btn-save {
-      background: linear-gradient(135deg, #38bdf8, #7c3aed);
-      color: #050510;
-      box-shadow: 0 0 16px rgba(56,189,248,0.4);
-    }
-    .btn-cancel { background: rgba(71, 85, 105, 0.6); color: #cbd5e1; border: 1px solid #334155; }
+    .form-buttons button { flex: 1; padding: 12px; border: none; border-radius: 10px; font-size: 15px; font-weight: 800; cursor: pointer; }
+    .btn-save { background: linear-gradient(135deg, #38bdf8, #7c3aed); color: #050510; box-shadow: 0 0 16px rgba(56,189,248,0.4); }
+    .btn-cancel { background: rgba(71, 85, 105, 0.6); color: var(--text); border: 1px solid var(--border); }
 
-    /* ===== EMPTY STATE ===== */
-    .empty-state {
-      text-align: center; padding: 44px 20px;
-      color: #64748b; font-size: 14px;
-    }
-
-    .green { color: #2dffb3; }
-    .red   { color: #ff4d6d; }
+    .empty-state { text-align: center; padding: 44px 20px; color: var(--text-sub); font-size: 14px; }
 
     /* ===== FOOTER ===== */
-    .footer {
-      text-align: center; margin-top: 26px; padding: 0 10px;
-      font-size: 12px; color: #64748b; line-height: 1.7;
-    }
+    .footer { text-align: center; margin-top: 26px; padding: 0 10px; font-size: 12px; color: var(--text-sub); line-height: 1.7; }
     .footer strong {
-      background: linear-gradient(90deg, #38bdf8, #7c3aed);
+      background: linear-gradient(90deg, var(--accent), var(--purple));
       -webkit-background-clip: text; background-clip: text;
       -webkit-text-fill-color: transparent; color: transparent;
     }
 
-    /* ===== ABOUT MODAL ===== */
+    /* ===== MODAL ===== */
     .modal-overlay {
-      position: fixed; inset: 0;
-      background: rgba(5,5,16,0.85);
+      position: fixed; inset: 0; background: rgba(5,5,16,0.85);
       backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
       display: none; align-items: center; justify-content: center;
       padding: 20px; z-index: 100;
     }
     .modal-overlay.show { display: flex; }
-    .modal {
-      padding: 26px 22px;
-      max-width: 400px; width: 100%; max-height: 82vh;
-      overflow-y: auto;
-      animation: modalIn 0.3s cubic-bezier(.4,0,.2,1);
-    }
+    .modal { padding: 26px 22px; max-width: 400px; width: 100%; max-height: 82vh; overflow-y: auto; animation: modalIn 0.3s cubic-bezier(.4,0,.2,1); }
     @keyframes modalIn {
       from { opacity: 0; transform: scale(0.9) translateY(14px); }
       to   { opacity: 1; transform: scale(1) translateY(0); }
     }
     .modal h2 {
       font-size: 22px; margin-bottom: 14px;
-      background: linear-gradient(90deg, #38bdf8, #7c3aed);
+      background: linear-gradient(90deg, var(--accent), var(--purple));
       -webkit-background-clip: text; background-clip: text;
-      -webkit-text-fill-color: transparent; color: transparent;
+      -webkit-text-fill-color: transparent;
     }
-    .modal p { font-size: 14px; color: #cbd5e1; margin-bottom: 12px; line-height: 1.7; }
-    .modal .highlight { color: #2dffb3; font-weight: 800; }
+    .modal p { font-size: 14px; color: var(--text); margin-bottom: 12px; line-height: 1.7; }
+    .modal .highlight { color: var(--mint); font-weight: 800; }
     .modal-close {
-      width: 100%; margin-top: 14px; padding: 14px;
-      border: none; border-radius: 12px;
-      background: linear-gradient(135deg, #38bdf8, #7c3aed);
-      color: #050510; font-size: 15px; font-weight: 800; cursor: pointer;
-      box-shadow: 0 0 18px rgba(56,189,248,0.4);
-      transition: transform 0.1s;
+      width: 100%; margin-top: 14px; padding: 14px; border: none; border-radius: 12px;
+      background: linear-gradient(135deg, #38bdf8, #7c3aed); color: #050510;
+      font-size: 15px; font-weight: 800; cursor: pointer;
     }
-    .modal-close:active { transform: scale(0.97); }
-    .version { font-size: 12px; color: #64748b; text-align: center; margin-top: 16px; }
+    .version { font-size: 12px; color: var(--text-sub); text-align: center; margin-top: 16px; }
 
     /* ===== CONFETTI ===== */
     .confetti-piece {
-      position: fixed; width: 8px; height: 8px;
-      border-radius: 2px;
-      pointer-events: none;
-      z-index: 999;
+      position: fixed; width: 8px; height: 8px; border-radius: 2px;
+      pointer-events: none; z-index: 999;
       animation: confettiFall 0.9s ease-out forwards;
     }
     @keyframes confettiFall {
@@ -426,7 +405,6 @@
 </head>
 <body>
 
-<!-- 3D Background -->
 <div class="bg-layer" aria-hidden="true">
   <div class="bg-radial"></div>
   <div class="bg-grid"></div>
@@ -447,10 +425,21 @@
       <h1>BunkBuddy</h1>
       <div class="tagline">Bunk smart. Not sorry.</div>
     </div>
-    <button class="about-btn" onclick="showAbout()">About</button>
+    <button class="icon-btn" id="installBtn" onclick="promptInstall()" title="Install" style="display:none">⬇</button>
+    <button class="icon-btn" id="soundBtn" onclick="toggleSound()" title="Sound">🔊</button>
+    <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" title="Theme">☀️</button>
+    <button class="icon-btn" onclick="showAbout()" title="About">?</button>
   </header>
 
   <div class="summary glass tilt" data-tilt id="summary"></div>
+
+  <div class="weekly glass tilt" data-tilt>
+    <div class="weekly-header">
+      <span>Last 7 Days</span>
+      <span class="weekly-totals" id="weeklyTotals"></span>
+    </div>
+    <div class="weekly-chart" id="weeklyChart"></div>
+  </div>
 
   <div class="settings-row glass">
     <label for="targetInput">Minimum Target</label>
@@ -465,7 +454,6 @@
   <div class="add-form glass hidden" id="addForm">
     <label for="newName">Subject Name</label>
     <input type="text" id="newName" placeholder="e.g., Math" maxlength="30">
-
     <div class="form-row">
       <div>
         <label for="newAttended">Attended</label>
@@ -476,7 +464,6 @@
         <input type="number" id="newTotal" placeholder="e.g., 40" min="0" inputmode="numeric">
       </div>
     </div>
-
     <div class="form-buttons">
       <button class="btn-cancel" onclick="hideAddForm()">Cancel</button>
       <button class="btn-save" onclick="addSubject()">Save</button>
@@ -484,77 +471,139 @@
   </div>
 
   <p class="footer">
-    <strong>BunkBuddy</strong> is a free, offline-first attendance tracker made for students.<br>
+    <strong>BunkBuddy</strong> is a free, offline-first attendance tracker.<br>
     Your data stays on your device — no accounts, no tracking, no ads. Ever.
   </p>
 </div>
 
-<!-- About Modal -->
 <div class="modal-overlay" id="aboutModal" onclick="if(event.target===this)hideAbout()">
   <div class="modal glass">
     <h2>🎓 About BunkBuddy</h2>
-    <p>
-      <span class="highlight">BunkBuddy</span> is the fastest way to answer one question:
-      <em>"Kitni classes aur bunk kar sakta hoon?"</em>
-    </p>
-    <p>
-      Add your subjects once. From then on, just tap ✅ or ❌ after each class.
-      BunkBuddy instantly tells you your attendance %, how many classes you can still
-      safely miss, and how many you need to attend in a row to recover.
-    </p>
-    <p>
-      <strong style="color:#2dffb3;">No login. No ads. No tracking.</strong><br>
-      Your data is saved only on your device using your browser's local storage.
-      It never leaves your phone.
-    </p>
-    <p>Built for students who hate doing attendance math. Works offline. Free forever.</p>
+    <p><span class="highlight">BunkBuddy</span> answers one question: <em>"Kitni classes aur bunk kar sakta hoon?"</em></p>
+    <p>Add subjects once. Tap ✅ or ❌ after each class. BunkBuddy shows your %, safe skips, and recovery count instantly.</p>
+    <p><strong style="color:var(--mint)">No login. No ads. No tracking.</strong><br>Data saved locally. Never leaves your phone.</p>
+    <p>Works offline. Installable as an app. Free forever.</p>
     <button class="modal-close" onclick="hideAbout()">Got it</button>
-    <div class="version">Version 3.0 · 3D Edition · Made with ❤️ for students</div>
+    <div class="version">Version 4.0 · Installable · Made with ❤️</div>
   </div>
 </div>
 
 <script>
-  // ---------- STATE ----------
+  // ========== STATE ==========
   var STORAGE_KEY = 'canibunk_v2';
-  var state = { target: 75, subjects: [] };
+  var state = {
+    target: 75,
+    theme: 'dark',
+    sound: true,
+    subjects: [],
+    history: []   // { date: 'YYYY-MM-DD', present: bool }
+  };
 
   function load() {
     try {
       var raw = localStorage.getItem(STORAGE_KEY);
       if (raw) {
-        var parsed = JSON.parse(raw);
-        if (parsed && Array.isArray(parsed.subjects)) {
-          state = parsed;
+        var p = JSON.parse(raw);
+        if (p && Array.isArray(p.subjects)) {
+          state = Object.assign(state, p);
           if (typeof state.target !== 'number') state.target = 75;
+          if (!state.theme) state.theme = 'dark';
+          if (typeof state.sound !== 'boolean') state.sound = true;
+          if (!Array.isArray(state.history)) state.history = [];
         }
       }
     } catch (e) {}
+    // prune history older than 30 days
+    var cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 30);
+    var cutKey = dateKey(cutoff);
+    state.history = state.history.filter(function (h) { return h.date >= cutKey; });
   }
+
   function save() {
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
   }
 
-  // ---------- MATH ----------
+  // ========== UTILS ==========
   function percent(att, tot) { return tot > 0 ? (att / tot) * 100 : 0; }
   function safeSkips(att, tot, target) {
     if (percent(att, tot) < target) return 0;
-    var maxTotal = Math.floor((att * 100) / target);
-    return Math.max(0, maxTotal - tot);
+    return Math.max(0, Math.floor((att * 100) / target) - tot);
   }
   function classesNeeded(att, tot, target) {
     if (percent(att, tot) >= target) return 0;
-    var x = Math.ceil((target * tot - 100 * att) / (100 - target));
-    return Math.max(1, x);
+    return Math.max(1, Math.ceil((target * tot - 100 * att) / (100 - target)));
   }
   function escapeHtml(s) {
-    var d = document.createElement('div');
-    d.textContent = s;
-    return d.innerHTML;
+    var d = document.createElement('div'); d.textContent = s; return d.innerHTML;
+  }
+  function dateKey(d) {
+    var y = d.getFullYear();
+    var m = String(d.getMonth() + 1).padStart(2, '0');
+    var day = String(d.getDate()).padStart(2, '0');
+    return y + '-' + m + '-' + day;
+  }
+  function todayKey() { return dateKey(new Date()); }
+
+  // ========== SOUND ==========
+  var audioCtx = null;
+  function playTone(freq, dur, type, volume) {
+    if (!state.sound) return;
+    try {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      var osc = audioCtx.createOscillator();
+      var gain = audioCtx.createGain();
+      osc.type = type || 'sine';
+      osc.frequency.value = freq;
+      var vol = volume || 0.12;
+      gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start();
+      osc.stop(audioCtx.currentTime + dur);
+    } catch (e) {}
+  }
+  function soundPresent() {
+    playTone(880, 0.12, 'sine', 0.1);
+    setTimeout(function () { playTone(1174, 0.12, 'sine', 0.1); }, 80);
+  }
+  function soundBunked() {
+    playTone(220, 0.18, 'sawtooth', 0.08);
+    setTimeout(function () { playTone(165, 0.18, 'sawtooth', 0.08); }, 100);
+  }
+  function soundSafe() {
+    playTone(880, 0.1, 'sine', 0.12);
+    setTimeout(function () { playTone(1318, 0.1, 'sine', 0.12); }, 70);
+    setTimeout(function () { playTone(1760, 0.15, 'sine', 0.12); }, 140);
+  }
+  function toggleSound() {
+    state.sound = !state.sound;
+    document.getElementById('soundBtn').textContent = state.sound ? '🔊' : '🔇';
+    document.getElementById('soundBtn').classList.toggle('active', state.sound);
+    save();
+    if (state.sound) soundPresent();
   }
 
-  // ---------- RENDER ----------
+  // ========== THEME ==========
+  function applyTheme() {
+    document.documentElement.setAttribute('data-theme', state.theme);
+    document.getElementById('themeBtn').textContent = state.theme === 'dark' ? '☀️' : '🌙';
+    document.getElementById('themeBtn').classList.toggle('active', state.theme === 'light');
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', state.theme === 'dark' ? '#050510' : '#eef2f7');
+  }
+  function toggleTheme() {
+    state.theme = state.theme === 'dark' ? 'light' : 'dark';
+    applyTheme();
+    save();
+    playTone(600, 0.08, 'sine', 0.06);
+  }
+
+  // ========== RENDER ==========
   function render() {
     renderSummary();
+    renderWeeklyChart();
     renderSubjects();
     attachTilt();
   }
@@ -564,7 +613,7 @@
     if (state.subjects.length === 0) {
       el.innerHTML =
         '<div class="summary-label">Welcome</div>' +
-        '<div class="summary-percent" style="color:#64748b">—</div>' +
+        '<div class="summary-percent" style="color:var(--text-sub)">—</div>' +
         '<div class="summary-sub">Add your first subject to begin</div>';
       return;
     }
@@ -588,6 +637,59 @@
       '</div>';
   }
 
+  function renderWeeklyChart() {
+    var chart = document.getElementById('weeklyChart');
+    var totalsEl = document.getElementById('weeklyTotals');
+    if (!chart) return;
+
+    var days = [];
+    var today = new Date();
+    for (var i = 6; i >= 0; i--) {
+      var d = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i);
+      var key = dateKey(d);
+      var present = 0, bunked = 0;
+      state.history.forEach(function (h) {
+        if (h.date === key) { if (h.present) present++; else bunked++; }
+      });
+      days.push({
+        label: ['S','M','T','W','T','F','S'][d.getDay()],
+        present: present, bunked: bunked, total: present + bunked
+      });
+    }
+
+    var totalAll = 0;
+    days.forEach(function (d) { totalAll += d.total; });
+
+    if (totalAll === 0) {
+      chart.innerHTML = '<div class="weekly-empty">No activity yet — start marking classes!</div>';
+      if (totalsEl) totalsEl.textContent = '';
+      return;
+    }
+
+    var maxVal = 1;
+    days.forEach(function (d) { if (d.total > maxVal) maxVal = d.total; });
+
+    var H = 64;
+    var html = '';
+    var totalP = 0, totalB = 0;
+    days.forEach(function (d) {
+      totalP += d.present; totalB += d.bunked;
+      var pPx = (d.present / maxVal) * H;
+      var bPx = (d.bunked / maxVal) * H;
+      html += '<div class="day-col">';
+      html += '<div class="day-bar">';
+      if (pPx > 0) html += '<div class="bar-present" style="height:' + pPx + 'px"></div>';
+      if (bPx > 0) html += '<div class="bar-bunked" style="height:' + bPx + 'px"></div>';
+      html += '</div>';
+      html += '<div class="day-label">' + d.label + '</div>';
+      html += '</div>';
+    });
+    chart.innerHTML = html;
+    if (totalsEl) {
+      totalsEl.innerHTML = '<span style="color:var(--mint)">✅ ' + totalP + '</span> · <span style="color:var(--red)">❌ ' + totalB + '</span>';
+    }
+  }
+
   function renderSubjects() {
     var el = document.getElementById('subjects');
     if (state.subjects.length === 0) {
@@ -605,11 +707,9 @@
 
       var advice;
       if (isSafe) {
-        var skips = safeSkips(s.attended, s.total, state.target);
-        advice = '<span class="green">✅ Can miss ' + skips + ' more</span>';
+        advice = '<span class="green">✅ Can miss ' + safeSkips(s.attended, s.total, state.target) + ' more</span>';
       } else {
-        var need = classesNeeded(s.attended, s.total, state.target);
-        advice = '<span class="red">⚠️ Attend ' + need + ' in a row to recover</span>';
+        advice = '<span class="red">⚠️ Attend ' + classesNeeded(s.attended, s.total, state.target) + ' in a row to recover</span>';
       }
 
       return (
@@ -631,20 +731,57 @@
             '<button class="quick-btn green-btn" onclick="quickUpdate(' + s.id + ',1,1,event)">✅ Present</button>' +
             '<button class="quick-btn red-btn" onclick="quickUpdate(' + s.id + ',0,1,event)">❌ Bunked</button>' +
           '</div>' +
+          '<div class="whatif">' +
+            '<span>🔮 Skip</span>' +
+            '<input type="number" class="whatif-input" data-id="' + s.id + '" min="0" max="200" value="0" inputmode="numeric" aria-label="Simulate skips">' +
+            '<span>more?</span>' +
+            '<span class="whatif-result" data-id="' + s.id + '"></span>' +
+          '</div>' +
         '</div>'
       );
     }).join('');
   }
 
-  // ---------- ACTIONS ----------
+  // ========== ACTIONS ==========
   function quickUpdate(id, attDelta, totDelta, evt) {
     var s = state.subjects.find(function (x) { return x.id === id; });
     if (!s) return;
+
+    var wasSafe = percent(s.attended, s.total) >= state.target;
+
     s.attended = Math.max(0, s.attended + attDelta);
     s.total = s.total + totDelta;
+
+    // log to history
+    state.history.push({ date: todayKey(), present: attDelta > 0 });
+    if (state.history.length > 500) state.history = state.history.slice(-500);
+
     save();
     render();
+
+    var isSafe = percent(s.attended, s.total) >= state.target;
+    if (attDelta > 0) {
+      if (!wasSafe && isSafe) soundSafe(); else soundPresent();
+    } else {
+      soundBunked();
+    }
+
     if (evt) burstConfetti(evt.clientX, evt.clientY, attDelta > 0 ? 'green' : 'red');
+    if (navigator.vibrate) navigator.vibrate(attDelta > 0 ? 30 : [40, 30, 40]);
+  }
+
+  function updateWhatIf(id) {
+    var input = document.querySelector('.whatif-input[data-id="' + id + '"]');
+    var result = document.querySelector('.whatif-result[data-id="' + id + '"]');
+    var s = state.subjects.find(function (x) { return x.id === id; });
+    if (!input || !result || !s) return;
+    var skip = parseInt(input.value, 10);
+    if (isNaN(skip) || skip < 0) skip = 0;
+    var newTotal = s.total + skip;
+    var newPct = newTotal > 0 ? (s.attended / newTotal) * 100 : 0;
+    var cls = newPct >= state.target ? 'green' : 'red';
+    var icon = newPct >= state.target ? '✓' : '⚠';
+    result.innerHTML = '→ <span class="' + cls + '">' + newPct.toFixed(1) + '% ' + icon + '</span>';
   }
 
   function deleteSubject(id) {
@@ -669,11 +806,10 @@
     var attended = parseInt(document.getElementById('newAttended').value, 10);
     var total = parseInt(document.getElementById('newTotal').value, 10);
     if (!name) { alert('Please enter a subject name.'); return; }
-    if (isNaN(attended) || isNaN(total) || attended < 0 || total < 0) {
-      alert('Please enter valid numbers for attended and total.'); return;
-    }
+    if (isNaN(attended) || isNaN(total) || attended < 0 || total < 0) { alert('Please enter valid numbers.'); return; }
     if (attended > total) { alert('Attended cannot be more than total held.'); return; }
     if (total === 0) { alert('Total held must be at least 1.'); return; }
+
     state.subjects.push({
       id: Date.now() + Math.floor(Math.random() * 1000),
       name: name, attended: attended, total: total
@@ -681,13 +817,13 @@
     save();
     hideAddForm();
     render();
+    soundPresent();
   }
 
-  // ---------- ABOUT ----------
   function showAbout() { document.getElementById('aboutModal').classList.add('show'); }
   function hideAbout() { document.getElementById('aboutModal').classList.remove('show'); }
 
-  // ---------- TARGET INPUT ----------
+  // ========== TARGET INPUT ==========
   var targetInput = document.getElementById('targetInput');
   targetInput.addEventListener('input', function (e) {
     var v = parseInt(e.target.value, 10);
@@ -698,13 +834,19 @@
     }
   });
 
-  // ---------- 3D TILT ----------
+  // ========== WHAT IF DELEGATION ==========
+  document.getElementById('subjects').addEventListener('input', function (e) {
+    if (e.target.classList.contains('whatif-input')) {
+      var id = parseInt(e.target.getAttribute('data-id'), 10);
+      updateWhatIf(id);
+    }
+  });
+
+  // ========== 3D TILT ==========
   function attachTilt() {
-    var cards = document.querySelectorAll('[data-tilt]');
-    cards.forEach(function (card) {
+    document.querySelectorAll('[data-tilt]').forEach(function (card) {
       if (card._tiltBound) return;
       card._tiltBound = true;
-
       function onMove(e) {
         var rect = card.getBoundingClientRect();
         var x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
@@ -712,7 +854,7 @@
         var cx = rect.width / 2, cy = rect.height / 2;
         var rotX = ((y - cy) / cy) * -6;
         var rotY = ((x - cx) / cx) * 6;
-        card.style.transform = 'perspective(900px) rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg) translateZ(0)';
+        card.style.transform = 'perspective(900px) rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg)';
       }
       function onLeave() {
         card.style.transform = 'perspective(900px) rotateX(0) rotateY(0)';
@@ -724,7 +866,7 @@
     });
   }
 
-  // ---------- PARTICLES ----------
+  // ========== PARTICLES ==========
   function spawnParticles() {
     var wrap = document.getElementById('particles');
     if (!wrap) return;
@@ -734,8 +876,6 @@
       var p = document.createElement('div');
       p.className = 'particle';
       var size = Math.random() * 4 + 2;
-      var dur = Math.random() * 12 + 10;
-      var delay = Math.random() * 12;
       var color = colors[Math.floor(Math.random() * colors.length)];
       p.style.width = size + 'px';
       p.style.height = size + 'px';
@@ -743,13 +883,14 @@
       p.style.bottom = '-10px';
       p.style.background = color;
       p.style.boxShadow = '0 0 10px 2px ' + color;
-      p.style.animationDuration = dur + 's';
-      p.style.animationDelay = delay + 's';
+      p.style.opacity = '0';
+      p.style.animationDuration = (Math.random() * 12 + 10) + 's';
+      p.style.animationDelay = (Math.random() * 12) + 's';
       wrap.appendChild(p);
     }
   }
 
-  // ---------- CONFETTI BURST ----------
+  // ========== CONFETTI ==========
   function burstConfetti(x, y, type) {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     var colors = type === 'green'
@@ -760,25 +901,55 @@
       el.className = 'confetti-piece';
       var angle = Math.random() * Math.PI * 2;
       var dist = 60 + Math.random() * 90;
-      var dx = Math.cos(angle) * dist;
-      var dy = Math.sin(angle) * dist - 30;
       el.style.left = x + 'px';
       el.style.top = y + 'px';
       el.style.background = colors[Math.floor(Math.random() * colors.length)];
-      el.style.setProperty('--dx', dx + 'px');
-      el.style.setProperty('--dy', dy + 'px');
+      el.style.setProperty('--dx', (Math.cos(angle) * dist) + 'px');
+      el.style.setProperty('--dy', (Math.sin(angle) * dist - 30) + 'px');
       el.style.setProperty('--rot', (Math.random() * 720 - 360) + 'deg');
       el.style.animationDelay = (i * 15) + 'ms';
       document.body.appendChild(el);
-      setTimeout(function (node) {
-        return function () { if (node.parentNode) node.remove(); };
-      }(el), 1100);
+      (function (node) {
+        setTimeout(function () { if (node.parentNode) node.remove(); }, 1100);
+      })(el);
     }
   }
 
-  // ---------- INIT ----------
+  // ========== PWA INSTALL ==========
+  var deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', function (e) {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById('installBtn').style.display = 'flex';
+    document.getElementById('installBtn').classList.add('pulse');
+  });
+  function promptInstall() {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(function (choice) {
+      if (choice.outcome === 'accepted') {
+        document.getElementById('installBtn').style.display = 'none';
+      }
+      deferredPrompt = null;
+    });
+  }
+  window.addEventListener('appinstalled', function () {
+    document.getElementById('installBtn').style.display = 'none';
+  });
+
+  // ========== SERVICE WORKER ==========
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js').catch(function () {});
+    });
+  }
+
+  // ========== INIT ==========
   load();
+  applyTheme();
   targetInput.value = state.target;
+  document.getElementById('soundBtn').textContent = state.sound ? '🔊' : '🔇';
+  document.getElementById('soundBtn').classList.toggle('active', state.sound);
   render();
   spawnParticles();
 </script>
