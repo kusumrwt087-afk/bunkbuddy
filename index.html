@@ -19,393 +19,169 @@
   <style>
     /* ===== THEME VARIABLES ===== */
     :root, [data-theme="dark"] {
-      --bg: #050510;
-      --card: rgba(20, 25, 45, 0.65);
-      --text: #e2e8f0;
-      --text-dim: #94a3b8;
-      --text-sub: #64748b;
-      --accent: #38bdf8;
-      --accent-dim: #7dd3fc;
-      --purple: #7c3aed;
-      --mint: #2dffb3;
-      --red: #ff4d6d;
-      --orange: #ff9f1c;
-      --border: rgba(56, 189, 248, 0.18);
-      --border-strong: rgba(56, 189, 248, 0.4);
-      --shadow: rgba(0,0,0,0.5);
-      --input-bg: rgba(5,5,16,0.7);
-      --grid-line: rgba(124, 58, 237, 0.35);
-      --grid-opacity: 0.55;
+      --bg: #050510; --card: rgba(20, 25, 45, 0.65); --text: #e2e8f0; --text-dim: #94a3b8;
+      --text-sub: #64748b; --accent: #38bdf8; --accent-dim: #7dd3fc; --purple: #7c3aed;
+      --mint: #2dffb3; --red: #ff4d6d; --orange: #ff9f1c; --border: rgba(56, 189, 248, 0.18);
+      --border-strong: rgba(56, 189, 248, 0.4); --shadow: rgba(0,0,0,0.5); --input-bg: rgba(5,5,16,0.7);
+      --grid-line: rgba(124, 58, 237, 0.35); --grid-opacity: 0.55;
     }
     [data-theme="light"] {
-      --bg: #eef2f7;
-      --card: rgba(255, 255, 255, 0.85);
-      --text: #0f172a;
-      --text-dim: #475569;
-      --text-sub: #64748b;
-      --accent: #0284c7;
-      --accent-dim: #0369a1;
-      --purple: #6d28d9;
-      --mint: #059669;
-      --red: #dc2626;
-      --orange: #ea580c;
-      --border: rgba(2, 132, 199, 0.25);
-      --border-strong: rgba(2, 132, 199, 0.5);
-      --shadow: rgba(15,23,42,0.15);
-      --input-bg: rgba(255,255,255,0.9);
-      --grid-line: rgba(109, 40, 217, 0.2);
-      --grid-opacity: 0.7;
+      --bg: #eef2f7; --card: rgba(255, 255, 255, 0.85); --text: #0f172a; --text-dim: #475569;
+      --text-sub: #64748b; --accent: #0284c7; --accent-dim: #0369a1; --purple: #6d28d9;
+      --mint: #059669; --red: #dc2626; --orange: #ea580c; --border: rgba(2, 132, 199, 0.25);
+      --border-strong: rgba(2, 132, 199, 0.5); --shadow: rgba(15,23,42,0.15); --input-bg: rgba(255,255,255,0.9);
+      --grid-line: rgba(109, 40, 217, 0.2); --grid-opacity: 0.7;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     html, body { overflow-x: hidden; }
     body {
       font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      line-height: 1.5;
-      position: relative;
-      transition: background 0.4s, color 0.4s;
-      padding-bottom: env(safe-area-inset-bottom);
+      background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.5;
+      position: relative; transition: background 0.4s, color 0.4s;
     }
 
-    /* ===== BACKGROUND ===== */
+    /* Background */
     .bg-layer { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
     .bg-radial {
       position: absolute; inset: 0;
-      background:
-        radial-gradient(circle at 20% 10%, rgba(124, 58, 237, 0.25), transparent 45%),
-        radial-gradient(circle at 80% 90%, rgba(56, 189, 248, 0.22), transparent 50%);
+      background: radial-gradient(circle at 20% 10%, rgba(124, 58, 237, 0.25), transparent 45%), radial-gradient(circle at 80% 90%, rgba(56, 189, 248, 0.22), transparent 50%);
     }
     [data-theme="light"] .bg-radial {
-      background:
-        radial-gradient(circle at 20% 10%, rgba(124, 58, 237, 0.12), transparent 45%),
-        radial-gradient(circle at 80% 90%, rgba(56, 189, 248, 0.15), transparent 50%);
+      background: radial-gradient(circle at 20% 10%, rgba(124, 58, 237, 0.12), transparent 45%), radial-gradient(circle at 80% 90%, rgba(56, 189, 248, 0.15), transparent 50%);
     }
     .bg-grid {
       position: absolute; left: -50%; right: -50%; bottom: 0; height: 55vh;
-      background-image:
-        linear-gradient(var(--grid-line) 1px, transparent 1px),
-        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-      background-size: 44px 44px;
-      transform: perspective(420px) rotateX(62deg);
-      transform-origin: center bottom;
-      animation: gridMove 6s linear infinite;
-      mask-image: linear-gradient(to top, #000 10%, transparent 95%);
-      -webkit-mask-image: linear-gradient(to top, #000 10%, transparent 95%);
+      background-image: linear-gradient(var(--grid-line) 1px, transparent 1px), linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+      background-size: 44px 44px; transform: perspective(420px) rotateX(62deg); transform-origin: center bottom;
+      animation: gridMove 6s linear infinite; mask-image: linear-gradient(to top, #000 10%, transparent 95%); -webkit-mask-image: linear-gradient(to top, #000 10%, transparent 95%);
       opacity: var(--grid-opacity);
     }
-    @keyframes gridMove {
-      0%   { background-position: 0 0, 0 0; }
-      100% { background-position: 0 44px, 0 0; }
-    }
-    .particle {
-      position: absolute; border-radius: 50%;
-      animation: floatUp linear infinite;
-      opacity: 0;
-    }
-    @keyframes floatUp {
-      0%   { transform: translateY(20vh) scale(0.6); opacity: 0; }
-      15%  { opacity: 0.85; }
-      85%  { opacity: 0.5; }
-      100% { transform: translateY(-105vh) scale(1.1); opacity: 0; }
-    }
+    @keyframes gridMove { 0% { background-position: 0 0, 0 0; } 100% { background-position: 0 44px, 0 0; } }
+    .particle { position: absolute; border-radius: 50%; animation: floatUp linear infinite; opacity: 0; }
+    @keyframes floatUp { 0% { transform: translateY(20vh) scale(0.6); opacity: 0; } 15% { opacity: 0.85; } 85% { opacity: 0.5; } 100% { transform: translateY(-105vh) scale(1.1); opacity: 0; } }
 
-    /* ===== APP ===== */
-    .app { max-width: 480px; margin: 0 auto; padding: 16px; position: relative; z-index: 1; }
+    /* App layout */
+    .app { max-width: 480px; margin: 0 auto; padding: 16px; position: relative; z-index: 1; padding-bottom: env(safe-area-inset-bottom); }
 
-    header { display: flex; align-items: center; gap: 8px; padding: 14px 4px 22px; }
-    .logo-cube {
-      width: 40px; height: 40px; position: relative;
-      transform-style: preserve-3d;
-      animation: cubeSpin 8s linear infinite;
-      flex-shrink: 0;
-    }
-    .logo-cube div {
-      position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; font-weight: 900; color: #050510;
-      border: 1px solid rgba(56,189,248,0.7);
-      box-shadow: inset 0 0 14px rgba(56,189,248,0.5);
-      background: linear-gradient(135deg, #38bdf8, #7c3aed);
-    }
-    .logo-cube .f1 { transform: translateZ(20px); }
-    .logo-cube .f2 { transform: rotateY(180deg) translateZ(20px); }
-    .logo-cube .f3 { transform: rotateY(90deg) translateZ(20px); }
-    .logo-cube .f4 { transform: rotateY(-90deg) translateZ(20px); }
-    .logo-cube .f5 { transform: rotateX(90deg) translateZ(20px); }
-    .logo-cube .f6 { transform: rotateX(-90deg) translateZ(20px); }
-    @keyframes cubeSpin {
-      0%   { transform: rotateX(-18deg) rotateY(0deg); }
-      100% { transform: rotateX(-18deg) rotateY(360deg); }
-    }
+    /* HEADER */
+    header { display: flex; align-items: center; gap: 8px; padding: 14px 4px 20px; flex-wrap: nowrap; }
+    .logo-cube { width: 36px; height: 36px; position: relative; transform-style: preserve-3d; animation: cubeSpin 8s linear infinite; flex-shrink: 0; }
+    .logo-cube div { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 900; color: #050510; border: 1px solid rgba(56,189,248,0.7); box-shadow: inset 0 0 14px rgba(56,189,248,0.5); background: linear-gradient(135deg, #38bdf8, #7c3aed); }
+    .logo-cube .f1 { transform: translateZ(18px); } .logo-cube .f2 { transform: rotateY(180deg) translateZ(18px); } .logo-cube .f3 { transform: rotateY(90deg) translateZ(18px); } .logo-cube .f4 { transform: rotateY(-90deg) translateZ(18px); } .logo-cube .f5 { transform: rotateX(90deg) translateZ(18px); } .logo-cube .f6 { transform: rotateX(-90deg) translateZ(18px); }
+    @keyframes cubeSpin { 0% { transform: rotateX(-18deg) rotateY(0deg); } 100% { transform: rotateX(-18deg) rotateY(360deg); } }
 
     .brand { flex: 1; min-width: 0; }
-    .brand h1 {
-      font-size: 18px; font-weight: 800; letter-spacing: -0.5px;
-      background: linear-gradient(90deg, var(--accent), var(--purple), var(--mint), var(--accent));
-      background-size: 300% 100%;
-      -webkit-background-clip: text; background-clip: text;
-      -webkit-text-fill-color: transparent; color: transparent;
-      animation: textShine 5s linear infinite;
-    }
+    .brand h1 { font-size: 16px; font-weight: 800; letter-spacing: -0.5px; background: linear-gradient(90deg, var(--accent), var(--purple), var(--mint), var(--accent)); background-size: 300% 100%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; animation: textShine 5s linear infinite; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .brand .tagline { font-size: 8px; color: var(--accent-dim); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     @keyframes textShine { 0% { background-position: 0% 50%; } 100% { background-position: 300% 50%; } }
-    .brand .tagline {
-      font-size: 10px; color: var(--accent-dim); font-weight: 700;
-      letter-spacing: 1px; text-transform: uppercase; margin-top: 1px;
-    }
 
-    .icon-btn {
-      background: var(--card);
-      border: 1px solid var(--border);
-      color: var(--text); width: 34px; height: 34px;
-      border-radius: 50%; font-size: 14px; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.2s;
-      flex-shrink: 0;
-      text-decoration: none;
-    }
+    .header-buttons { display: flex; gap: 4px; flex-shrink: 0; }
+    .icon-btn { background: var(--card); border: 1px solid var(--border); color: var(--text); width: 30px; height: 30px; border-radius: 50%; font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; text-decoration: none; }
     .icon-btn:active { transform: scale(0.9); }
-    .icon-btn.active { border-color: var(--accent); box-shadow: 0 0 12px rgba(56,189,248,0.4); }
+    .icon-btn.active { border-color: var(--accent); box-shadow: 0 0 10px rgba(56,189,248,0.4); }
     .icon-btn.pulse { animation: pulseGlow 1s ease-in-out infinite; }
-    @keyframes pulseGlow {
-      0%, 100% { box-shadow: 0 0 12px rgba(56,189,248,0.4); }
-      50% { box-shadow: 0 0 22px rgba(56,189,248,0.8); border-color: #38bdf8; }
-    }
+    @keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 12px rgba(56,189,248,0.4); } 50% { box-shadow: 0 0 22px rgba(56,189,248,0.8); border-color: #38bdf8; } }
 
-    /* ===== GLASS ===== */
-    .glass {
-      background: var(--card);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      box-shadow: 0 8px 32px var(--shadow), inset 0 1px 0 rgba(255,255,255,0.06);
-      position: relative;
-    }
-    .glass::before {
-      content: ""; position: absolute; inset: -1px; border-radius: 18px;
-      padding: 1px;
-      background: linear-gradient(135deg, rgba(56,189,248,0.5), transparent 40%, transparent 60%, rgba(124,58,237,0.5));
-      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-      -webkit-mask-composite: xor; mask-composite: exclude;
-      pointer-events: none; opacity: 0.7;
-    }
+    /* GLASS & CARDS */
+    .glass { background: var(--card); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border: 1px solid var(--border); border-radius: 18px; box-shadow: 0 8px 32px var(--shadow), inset 0 1px 0 rgba(255,255,255,0.06); position: relative; }
+    .glass::before { content: ""; position: absolute; inset: -1px; border-radius: 18px; padding: 1px; background: linear-gradient(135deg, rgba(56,189,248,0.5), transparent 40%, transparent 60%, rgba(124,58,237,0.5)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; opacity: 0.7; }
 
-    /* ===== SUMMARY ===== */
-    .summary {
-      padding: 22px 20px; margin-bottom: 14px; text-align: center;
-      transform-style: preserve-3d;
-      transition: transform 0.2s ease-out;
+    /* BIG LEADERBOARD BUTTON */
+    .leaderboard-banner {
+      display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; padding: 16px; margin-bottom: 14px;
+      background: linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(56, 189, 248, 0.2)); border: 1px solid var(--accent);
+      border-radius: 16px; color: var(--text); text-decoration: none; font-size: 16px; font-weight: 800;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.2); transition: transform 0.2s;
     }
+    .leaderboard-banner:active { transform: scale(0.98); }
+
+    /* SUMMARY & OTHERS */
+    .summary { padding: 22px 20px; margin-bottom: 14px; text-align: center; transform-style: preserve-3d; transition: transform 0.2s ease-out; }
     .summary-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
-    .summary-percent {
-      font-size: 48px; font-weight: 900; letter-spacing: -2px;
-      margin: 6px 0; text-shadow: 0 0 22px currentColor;
-      transition: color 0.4s;
-    }
+    .summary-percent { font-size: 48px; font-weight: 900; letter-spacing: -2px; margin: 6px 0; text-shadow: 0 0 22px currentColor; transition: color 0.4s; }
     .summary-sub { font-size: 13px; color: var(--text-dim); }
     .summary-badges { display: flex; gap: 8px; justify-content: center; margin-top: 14px; flex-wrap: wrap; }
     .badge { font-size: 12px; padding: 5px 12px; border-radius: 20px; font-weight: 700; }
     .badge.green { background: rgba(45,255,179,0.12); color: var(--mint); border: 1px solid rgba(45,255,179,0.35); }
     .badge.red { background: rgba(255,77,109,0.12); color: var(--red); border: 1px solid rgba(255,77,109,0.4); }
 
-    /* ===== WEEKLY CHART ===== */
     .weekly { padding: 16px 18px; margin-bottom: 14px; }
-    .weekly-header {
-      display: flex; justify-content: space-between; align-items: center;
-      font-size: 12px; color: var(--text-dim); font-weight: 700;
-      text-transform: uppercase; letter-spacing: 1px;
-      margin-bottom: 10px;
-    }
+    .weekly-header { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text-dim); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
     .weekly-totals { font-size: 12px; text-transform: none; letter-spacing: 0; font-weight: 600; }
     .weekly-chart { display: flex; gap: 6px; align-items: flex-end; }
     .day-col { flex: 1; display: flex; flex-direction: column; }
     .day-bar { display: flex; flex-direction: column-reverse; align-items: stretch; }
-    .bar-present { background: linear-gradient(180deg, #2dffb3, #059669); }
-    .bar-bunked { background: linear-gradient(180deg, #ff4d6d, #b91c1c); }
+    .bar-present { background: linear-gradient(180deg, #2dffb3, #059669); } .bar-bunked { background: linear-gradient(180deg, #ff4d6d, #b91c1c); }
     .bar-present, .bar-bunked { width: 100%; border-radius: 2px 2px 0 0; }
     .day-label { font-size: 10px; text-align: center; color: var(--text-dim); margin-top: 4px; font-weight: 700; }
     .weekly-empty { text-align: center; padding: 20px 0; color: var(--text-sub); font-size: 13px; }
 
-    /* ===== SETTINGS ===== */
     .settings-row { display: flex; align-items: center; gap: 10px; padding: 14px 18px; margin-bottom: 18px; }
     .settings-row label { font-size: 14px; color: var(--text); font-weight: 600; flex: 1; }
-    .settings-row input {
-      width: 76px; padding: 8px 10px; border-radius: 10px;
-      border: 1px solid var(--border-strong);
-      background: var(--input-bg); color: var(--accent);
-      font-size: 16px; font-weight: 800; text-align: center; outline: none;
-    }
+    .settings-row input { width: 76px; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border-strong); background: var(--input-bg); color: var(--accent); font-size: 16px; font-weight: 800; text-align: center; outline: none; }
     .settings-row input:focus { border-color: var(--accent); box-shadow: 0 0 14px rgba(56,189,248,0.4); }
     .settings-row .suffix { font-size: 15px; color: var(--text-sub); font-weight: 700; }
 
-    /* ===== SUBJECT CARD ===== */
-    .subject-card {
-      padding: 18px; margin-bottom: 14px;
-      transform-style: preserve-3d;
-      transition: transform 0.15s ease-out;
-      animation: cardIn 0.4s ease;
-    }
-    @keyframes cardIn {
-      from { opacity: 0; transform: translateY(14px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    .subject-card { padding: 18px; margin-bottom: 14px; transform-style: preserve-3d; transition: transform 0.15s ease-out; animation: cardIn 0.4s ease; }
+    @keyframes cardIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
     .subject-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .subject-name { font-size: 17px; font-weight: 800; color: var(--text); letter-spacing: -0.3px; }
-    .delete-btn {
-      background: rgba(255,77,109,0.1); border: 1px solid rgba(255,77,109,0.3);
-      color: var(--red); font-size: 14px; cursor: pointer;
-      padding: 6px 10px; border-radius: 8px; font-weight: 700;
-    }
-    .delete-btn:active { transform: scale(0.9); }
-
+    .delete-btn { background: rgba(255,77,109,0.1); border: 1px solid rgba(255,77,109,0.3); color: var(--red); font-size: 14px; cursor: pointer; padding: 6px 10px; border-radius: 8px; font-weight: 700; }
     .subject-numbers { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; }
     .subject-percent { font-size: 26px; font-weight: 900; text-shadow: 0 0 14px currentColor; }
     .subject-count { font-size: 13px; color: var(--text-dim); font-weight: 600; }
 
-    .progress-bar {
-      height: 12px; background: var(--input-bg); border-radius: 8px;
-      position: relative; margin-bottom: 12px;
-      box-shadow: inset 0 2px 6px rgba(0,0,0,0.5);
-      border: 1px solid var(--border);
-    }
+    .progress-bar { height: 12px; background: var(--input-bg); border-radius: 8px; position: relative; margin-bottom: 12px; box-shadow: inset 0 2px 6px rgba(0,0,0,0.5); border: 1px solid var(--border); }
     .progress-fill { height: 100%; border-radius: 8px; transition: width 0.6s cubic-bezier(.4,0,.2,1); position: relative; }
-    .progress-fill::after {
-      content: ""; position: absolute; inset: 0; border-radius: 8px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.35), transparent 55%);
-    }
+    .progress-fill::after { content: ""; position: absolute; inset: 0; border-radius: 8px; background: linear-gradient(180deg, rgba(255,255,255,0.35), transparent 55%); }
     .bar-green { background: linear-gradient(90deg, #059669, #2dffb3); box-shadow: 0 0 12px rgba(45,255,179,0.55); }
     .bar-red { background: linear-gradient(90deg, #b91c1c, #ff4d6d); box-shadow: 0 0 12px rgba(255,77,109,0.55); }
     .target-marker { position: absolute; top: -4px; bottom: -4px; width: 3px; background: #fbbf24; transform: translateX(-50%); border-radius: 2px; box-shadow: 0 0 10px #fbbf24; }
 
     .subject-advice { font-size: 13px; margin-bottom: 14px; font-weight: 700; }
-    .green { color: var(--mint); }
-    .red { color: var(--red); }
+    .green { color: var(--mint); } .red { color: var(--red); }
 
     .quick-row { display: flex; gap: 10px; }
-    .quick-btn {
-      flex: 1; padding: 13px; border-radius: 12px;
-      font-size: 14px; font-weight: 800; cursor: pointer;
-      transition: transform 0.1s, box-shadow 0.25s;
-      letter-spacing: 0.3px;
-    }
+    .quick-btn { flex: 1; padding: 13px; border-radius: 12px; font-size: 14px; font-weight: 800; cursor: pointer; transition: transform 0.1s, box-shadow 0.25s; letter-spacing: 0.3px; }
     .quick-btn:active { transform: scale(0.96); }
-    .green-btn {
-      background: linear-gradient(135deg, rgba(45,255,179,0.2), rgba(5,150,105,0.25));
-      color: var(--mint); border: 1px solid rgba(45,255,179,0.45);
-      box-shadow: 0 0 14px rgba(45,255,179,0.2);
-    }
-    .red-btn {
-      background: linear-gradient(135deg, rgba(255,77,109,0.2), rgba(185,28,28,0.25));
-      color: var(--red); border: 1px solid rgba(255,77,109,0.45);
-      box-shadow: 0 0 14px rgba(255,77,109,0.2);
-    }
+    .green-btn { background: linear-gradient(135deg, rgba(45,255,179,0.2), rgba(5,150,105,0.25)); color: var(--mint); border: 1px solid rgba(45,255,179,0.45); }
+    .red-btn { background: linear-gradient(135deg, rgba(255,77,109,0.2), rgba(185,28,28,0.25)); color: var(--red); border: 1px solid rgba(255,77,109,0.45); }
 
-    /* ===== WHAT IF ===== */
-    .whatif {
-      display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-      margin-top: 14px; padding-top: 12px;
-      border-top: 1px dashed var(--border);
-      font-size: 12px; color: var(--text-dim);
-    }
+    .whatif { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border); font-size: 12px; color: var(--text-dim); }
     .whatif span:first-child { font-weight: 700; color: var(--text-sub); }
-    .whatif-input {
-      width: 54px; padding: 5px 6px; border-radius: 8px;
-      border: 1px solid var(--border); background: var(--input-bg);
-      color: var(--accent); font-size: 13px; font-weight: 800;
-      text-align: center; outline: none;
-    }
-    .whatif-input:focus { border-color: var(--accent); }
+    .whatif-input { width: 54px; padding: 5px 6px; border-radius: 8px; border: 1px solid var(--border); background: var(--input-bg); color: var(--accent); font-size: 13px; font-weight: 800; text-align: center; outline: none; }
     .whatif-result { font-weight: 800; font-size: 13px; margin-left: auto; }
 
-    /* ===== ADD BTN ===== */
-    .add-btn {
-      width: 100%; padding: 17px; margin-top: 10px;
-      border: 2px dashed var(--border-strong);
-      border-radius: 14px; background: rgba(56,189,248,0.03);
-      color: var(--accent-dim); font-size: 15px; font-weight: 800;
-      cursor: pointer; letter-spacing: 0.5px;
-      transition: all 0.25s;
-    }
+    .add-btn { width: 100%; padding: 17px; margin-top: 10px; border: 2px dashed var(--border-strong); border-radius: 14px; background: rgba(56,189,248,0.03); color: var(--accent-dim); font-size: 15px; font-weight: 800; cursor: pointer; transition: all 0.25s; }
     .add-btn:active { background: rgba(56,189,248,0.12); box-shadow: 0 0 18px rgba(56,189,248,0.3); }
 
-    /* ===== ADD FORM ===== */
     .add-form { padding: 18px; margin-top: 12px; }
     .add-form.hidden { display: none; }
     .add-form label { display: block; font-size: 11px; color: var(--text-dim); margin: 10px 0 5px; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; }
-    .add-form input {
-      width: 100%; padding: 12px; border-radius: 10px;
-      border: 1px solid var(--border); background: var(--input-bg);
-      color: var(--text); font-size: 15px; outline: none;
-    }
-    .add-form input:focus { border-color: var(--accent); box-shadow: 0 0 12px rgba(56,189,248,0.3); }
+    .add-form input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--input-bg); color: var(--text); font-size: 15px; outline: none; }
     .form-row { display: flex; gap: 10px; }
     .form-row > div { flex: 1; }
     .form-buttons { display: flex; gap: 10px; margin-top: 16px; }
     .form-buttons button { flex: 1; padding: 12px; border: none; border-radius: 10px; font-size: 15px; font-weight: 800; cursor: pointer; }
-    .btn-save { background: linear-gradient(135deg, #38bdf8, #7c3aed); color: #050510; box-shadow: 0 0 16px rgba(56,189,248,0.4); }
+    .btn-save { background: linear-gradient(135deg, #38bdf8, #7c3aed); color: #050510; }
     .btn-cancel { background: rgba(71, 85, 105, 0.6); color: var(--text); border: 1px solid var(--border); }
 
     .empty-state { text-align: center; padding: 44px 20px; color: var(--text-sub); font-size: 14px; }
-
-    /* ===== FOOTER ===== */
     .footer { text-align: center; margin-top: 26px; padding: 0 10px; font-size: 12px; color: var(--text-sub); line-height: 1.7; }
-    .footer strong {
-      background: linear-gradient(90deg, var(--accent), var(--purple));
-      -webkit-background-clip: text; background-clip: text;
-      -webkit-text-fill-color: transparent; color: transparent;
-    }
 
-    /* ===== MODAL ===== */
-    .modal-overlay {
-      position: fixed; inset: 0; background: rgba(5,5,16,0.85);
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-      display: none; align-items: center; justify-content: center;
-      padding: 20px; z-index: 100;
-    }
+    /* MODAL & CONFETTI */
+    .modal-overlay { position: fixed; inset: 0; background: rgba(5,5,16,0.85); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 100; }
     .modal-overlay.show { display: flex; }
     .modal { padding: 26px 22px; max-width: 400px; width: 100%; max-height: 82vh; overflow-y: auto; animation: modalIn 0.3s cubic-bezier(.4,0,.2,1); }
-    @keyframes modalIn {
-      from { opacity: 0; transform: scale(0.9) translateY(14px); }
-      to   { opacity: 1; transform: scale(1) translateY(0); }
-    }
-    .modal h2 {
-      font-size: 22px; margin-bottom: 14px;
-      background: linear-gradient(90deg, var(--accent), var(--purple));
-      -webkit-background-clip: text; background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+    @keyframes modalIn { from { opacity: 0; transform: scale(0.9) translateY(14px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+    .modal h2 { font-size: 22px; margin-bottom: 14px; background: linear-gradient(90deg, var(--accent), var(--purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
     .modal p { font-size: 14px; color: var(--text); margin-bottom: 12px; line-height: 1.7; }
     .modal .highlight { color: var(--mint); font-weight: 800; }
-    .modal-close {
-      width: 100%; margin-top: 14px; padding: 14px; border: none; border-radius: 12px;
-      background: linear-gradient(135deg, #38bdf8, #7c3aed); color: #050510;
-      font-size: 15px; font-weight: 800; cursor: pointer;
-    }
-    .version { font-size: 12px; color: var(--text-sub); text-align: center; margin-top: 16px; }
-
-    /* ===== CONFETTI ===== */
-    .confetti-piece {
-      position: fixed; width: 8px; height: 8px; border-radius: 2px;
-      pointer-events: none; z-index: 999;
-      animation: confettiFall 0.9s ease-out forwards;
-    }
-    @keyframes confettiFall {
-      0%   { transform: translate(0,0) scale(1) rotate(0deg); opacity: 1; }
-      100% { transform: translate(var(--dx), var(--dy)) scale(0.4) rotate(var(--rot)); opacity: 0; }
-    }
-
-    /* ===== REDUCED MOTION ===== */
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-      }
-      .bg-grid, .particle, .logo-cube { display: none; }
-    }
+    .modal-close { width: 100%; margin-top: 14px; padding: 14px; border: none; border-radius: 12px; background: linear-gradient(135deg, #38bdf8, #7c3aed); color: #050510; font-size: 15px; font-weight: 800; cursor: pointer; }
+    .confetti-piece { position: fixed; width: 8px; height: 8px; border-radius: 2px; pointer-events: none; z-index: 999; animation: confettiFall 0.9s ease-out forwards; }
+    @keyframes confettiFall { 0% { transform: translate(0,0) scale(1) rotate(0deg); opacity: 1; } 100% { transform: translate(var(--dx), var(--dy)) scale(0.4) rotate(var(--rot)); opacity: 0; } }
+    @media (prefers-reduced-motion: reduce) { .bg-grid, .particle, .logo-cube { display: none; } }
   </style>
 </head>
 <body>
@@ -419,23 +195,25 @@
 <div class="app">
   <header>
     <div class="logo-cube" aria-hidden="true">
-      <div class="f1">B</div>
-      <div class="f2">🎓</div>
-      <div class="f3">B</div>
-      <div class="f4">⚡</div>
-      <div class="f5">B</div>
-      <div class="f6">✨</div>
+      <div class="f1">B</div><div class="f2">🎓</div><div class="f3">B</div>
+      <div class="f4">⚡</div><div class="f5">B</div><div class="f6">✨</div>
     </div>
     <div class="brand">
       <h1>BunkBuddy</h1>
       <div class="tagline">Bunk smart. Not sorry.</div>
     </div>
-    <a href="leaderboard.html" class="icon-btn" title="Leaderboard">🏆</a>
-    <button class="icon-btn" id="installBtn" onclick="promptInstall()" title="Install" style="display:none">⬇</button>
-    <button class="icon-btn" id="soundBtn" onclick="toggleSound()" title="Sound">🔊</button>
-    <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" title="Theme">☀️</button>
-    <button class="icon-btn" onclick="showAbout()" title="About">?</button>
+    <div class="header-buttons">
+      <button class="icon-btn" id="installBtn" onclick="promptInstall()" title="Install" style="display:none">⬇</button>
+      <button class="icon-btn" id="soundBtn" onclick="toggleSound()" title="Sound">🔊</button>
+      <button class="icon-btn" id="themeBtn" onclick="toggleTheme()" title="Theme">☀️</button>
+      <button class="icon-btn" onclick="showAbout()" title="About">?</button>
+    </div>
   </header>
+
+  <!-- 🔥 ये है वो बड़ा Leaderboard बटन जो पक्का दिखेगा 🔥 -->
+  <a href="leaderboard.html" class="leaderboard-banner">
+    <span>🏆</span> View Global Leaderboard
+  </a>
 
   <div class="summary glass tilt" data-tilt id="summary"></div>
 
@@ -454,21 +232,14 @@
   </div>
 
   <div id="subjects"></div>
-
   <button class="add-btn" onclick="showAddForm()">+ Add Subject</button>
 
   <div class="add-form glass hidden" id="addForm">
     <label for="newName">Subject Name</label>
     <input type="text" id="newName" placeholder="e.g., Math" maxlength="30">
     <div class="form-row">
-      <div>
-        <label for="newAttended">Attended</label>
-        <input type="number" id="newAttended" placeholder="e.g., 30" min="0" inputmode="numeric">
-      </div>
-      <div>
-        <label for="newTotal">Total Held</label>
-        <input type="number" id="newTotal" placeholder="e.g., 40" min="0" inputmode="numeric">
-      </div>
+      <div><label for="newAttended">Attended</label><input type="number" id="newAttended" placeholder="e.g., 30" min="0" inputmode="numeric"></div>
+      <div><label for="newTotal">Total Held</label><input type="number" id="newTotal" placeholder="e.g., 40" min="0" inputmode="numeric"></div>
     </div>
     <div class="form-buttons">
       <button class="btn-cancel" onclick="hideAddForm()">Cancel</button>
@@ -476,10 +247,7 @@
     </div>
   </div>
 
-  <p class="footer">
-    <strong>BunkBuddy</strong> is a free, offline-first attendance tracker.<br>
-    Your data stays on your device — no accounts, no tracking, no ads. Ever.
-  </p>
+  <p class="footer"><strong>BunkBuddy</strong> is a free, offline-first attendance tracker.<br>Your data stays on your device — no accounts, no tracking, no ads.</p>
 </div>
 
 <div class="modal-overlay" id="aboutModal" onclick="if(event.target===this)hideAbout()">
@@ -487,23 +255,14 @@
     <h2>🎓 About BunkBuddy</h2>
     <p><span class="highlight">BunkBuddy</span> answers one question: <em>"Kitni classes aur bunk kar sakta hoon?"</em></p>
     <p>Add subjects once. Tap ✅ or ❌ after each class. BunkBuddy shows your %, safe skips, and recovery count instantly.</p>
-    <p><strong style="color:var(--mint)">No login. No ads. No tracking.</strong><br>Data saved locally. Never leaves your phone.</p>
-    <p>Works offline. Installable as an app. Free forever.</p>
+    <p><strong style="color:var(--mint)">No login. No ads. No tracking.</strong></p>
     <button class="modal-close" onclick="hideAbout()">Got it</button>
-    <div class="version">Version 4.0 · Leaderboard Edition · Made with ❤️</div>
   </div>
 </div>
 
 <script>
-  // ========== STATE ==========
   var STORAGE_KEY = 'canibunk_v2';
-  var state = {
-    target: 75,
-    theme: 'dark',
-    sound: true,
-    subjects: [],
-    history: []   // { date: 'YYYY-MM-DD', present: bool }
-  };
+  var state = { target: 75, theme: 'dark', sound: true, subjects: [], history: [] };
 
   function load() {
     try {
@@ -512,7 +271,7 @@
         var p = JSON.parse(raw);
         if (p && Array.isArray(p.subjects)) {
           state = Object.assign(state, p);
-          if (typeof state.target !== 'number') state.target = 75;
+          if (typeof state.target !== 'number' || isNaN(state.target) || state.target < 1) state.target = 75;
           if (!state.theme) state.theme = 'dark';
           if (typeof state.sound !== 'boolean') state.sound = true;
           if (!Array.isArray(state.history)) state.history = [];
@@ -520,520 +279,192 @@
       }
     } catch (e) {}
     var cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 30);
-    var cutKey = dateKey(cutoff);
-    state.history = state.history.filter(function (h) { return h.date >= cutKey; });
+    state.history = state.history.filter(function (h) { return h.date >= dateKey(cutoff); });
   }
+  function save() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {} }
 
-  function save() {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
-  }
-
-  // ========== UTILS ==========
   function percent(att, tot) { return tot > 0 ? (att / tot) * 100 : 0; }
-  function safeSkips(att, tot, target) {
-    if (percent(att, tot) < target) return 0;
-    return Math.max(0, Math.floor((att * 100) / target) - tot);
-  }
-  function classesNeeded(att, tot, target) {
-    if (percent(att, tot) >= target) return 0;
-    return Math.max(1, Math.ceil((target * tot - 100 * att) / (100 - target)));
-  }
-  function escapeHtml(s) {
-    var d = document.createElement('div'); d.textContent = s; return d.innerHTML;
-  }
-  function dateKey(d) {
-    var y = d.getFullYear();
-    var m = String(d.getMonth() + 1).padStart(2, '0');
-    var day = String(d.getDate()).padStart(2, '0');
-    return y + '-' + m + '-' + day;
-  }
+  function safeSkips(att, tot, target) { if (percent(att, tot) < target) return 0; return Math.max(0, Math.floor((att * 100) / target) - tot); }
+  function classesNeeded(att, tot, target) { if (percent(att, tot) >= target) return 0; return Math.max(1, Math.ceil((target * tot - 100 * att) / (100 - target))); }
+  function escapeHtml(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+  function dateKey(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
   function todayKey() { return dateKey(new Date()); }
 
-  // ========== SOUND ==========
   var audioCtx = null;
   function playTone(freq, dur, type, volume) {
     if (!state.sound) return;
     try {
       if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       if (audioCtx.state === 'suspended') audioCtx.resume();
-      var osc = audioCtx.createOscillator();
-      var gain = audioCtx.createGain();
-      osc.type = type || 'sine';
-      osc.frequency.value = freq;
-      var vol = volume || 0.12;
-      gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+      var osc = audioCtx.createOscillator(); var gain = audioCtx.createGain();
+      osc.type = type || 'sine'; osc.frequency.value = freq;
+      gain.gain.setValueAtTime(volume || 0.12, audioCtx.currentTime);
       gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start();
-      osc.stop(audioCtx.currentTime + dur);
+      osc.connect(gain); gain.connect(audioCtx.destination);
+      osc.start(); osc.stop(audioCtx.currentTime + dur);
     } catch (e) {}
   }
-  function soundPresent() {
-    playTone(880, 0.12, 'sine', 0.1);
-    setTimeout(function () { playTone(1174, 0.12, 'sine', 0.1); }, 80);
-  }
-  function soundBunked() {
-    playTone(220, 0.18, 'sawtooth', 0.08);
-    setTimeout(function () { playTone(165, 0.18, 'sawtooth', 0.08); }, 100);
-  }
-  function soundSafe() {
-    playTone(880, 0.1, 'sine', 0.12);
-    setTimeout(function () { playTone(1318, 0.1, 'sine', 0.12); }, 70);
-    setTimeout(function () { playTone(1760, 0.15, 'sine', 0.12); }, 140);
-  }
-  function toggleSound() {
-    state.sound = !state.sound;
-    document.getElementById('soundBtn').textContent = state.sound ? '🔊' : '🔇';
-    document.getElementById('soundBtn').classList.toggle('active', state.sound);
-    save();
-    if (state.sound) soundPresent();
-  }
+  function soundPresent() { playTone(880, 0.12, 'sine', 0.1); setTimeout(function () { playTone(1174, 0.12, 'sine', 0.1); }, 80); }
+  function soundBunked() { playTone(220, 0.18, 'sawtooth', 0.08); setTimeout(function () { playTone(165, 0.18, 'sawtooth', 0.08); }, 100); }
+  function soundSafe() { playTone(880, 0.1, 'sine', 0.12); setTimeout(function () { playTone(1318, 0.1, 'sine', 0.12); }, 70); setTimeout(function () { playTone(1760, 0.15, 'sine', 0.12); }, 140); }
+  function toggleSound() { state.sound = !state.sound; document.getElementById('soundBtn').textContent = state.sound ? '🔊' : '🔇'; save(); if (state.sound) soundPresent(); }
 
-  // ========== THEME ==========
   function applyTheme() {
     document.documentElement.setAttribute('data-theme', state.theme);
     document.getElementById('themeBtn').textContent = state.theme === 'dark' ? '☀️' : '🌙';
-    document.getElementById('themeBtn').classList.toggle('active', state.theme === 'light');
     var meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.setAttribute('content', state.theme === 'dark' ? '#050510' : '#eef2f7');
   }
-  function toggleTheme() {
-    state.theme = state.theme === 'dark' ? 'light' : 'dark';
-    applyTheme();
-    save();
-    playTone(600, 0.08, 'sine', 0.06);
-  }
+  function toggleTheme() { state.theme = state.theme === 'dark' ? 'light' : 'dark'; applyTheme(); save(); playTone(600, 0.08, 'sine', 0.06); }
 
-  // ========== RENDER ==========
-  function render() {
-    renderSummary();
-    renderWeeklyChart();
-    renderSubjects();
-    attachTilt();
-  }
+  function render() { renderSummary(); renderWeeklyChart(); renderSubjects(); attachTilt(); }
 
   function renderSummary() {
     var el = document.getElementById('summary');
-    if (state.subjects.length === 0) {
-      el.innerHTML =
-        '<div class="summary-label">Welcome</div>' +
-        '<div class="summary-percent" style="color:var(--text-sub)">—</div>' +
-        '<div class="summary-sub">Add your first subject to begin</div>';
-      return;
-    }
-    var att = 0, tot = 0;
-    state.subjects.forEach(function (s) { att += s.attended; tot += s.total; });
-    var pct = tot > 0 ? (att / tot) * 100 : 0;
-    var cls = pct >= state.target ? 'green' : 'red';
-    var safeCount = 0, riskCount = 0;
-    state.subjects.forEach(function (s) {
-      if (percent(s.attended, s.total) >= state.target) safeCount++;
-      else riskCount++;
-    });
-
-    el.innerHTML =
-      '<div class="summary-label">Overall Attendance</div>' +
-      '<div class="summary-percent ' + cls + '">' + pct.toFixed(1) + '%</div>' +
-      '<div class="summary-sub">' + att + ' of ' + tot + ' classes attended</div>' +
-      '<div class="summary-badges">' +
-        (safeCount > 0 ? '<span class="badge green">✅ ' + safeCount + ' safe</span>' : '') +
-        (riskCount > 0 ? '<span class="badge red">⚠️ ' + riskCount + ' at risk</span>' : '') +
-      '</div>';
+    if (state.subjects.length === 0) { el.innerHTML = '<div class="summary-label">Welcome</div><div class="summary-percent" style="color:var(--text-sub)">—</div><div class="summary-sub">Add your first subject to begin</div>'; return; }
+    var att = 0, tot = 0; state.subjects.forEach(function (s) { att += s.attended; tot += s.total; });
+    var pct = tot > 0 ? (att / tot) * 100 : 0; var cls = pct >= state.target ? 'green' : 'red';
+    var safeCount = 0, riskCount = 0; state.subjects.forEach(function (s) { if (percent(s.attended, s.total) >= state.target) safeCount++; else riskCount++; });
+    el.innerHTML = '<div class="summary-label">Overall Attendance</div><div class="summary-percent ' + cls + '">' + pct.toFixed(1) + '%</div><div class="summary-sub">' + att + ' of ' + tot + ' classes attended</div><div class="summary-badges">' + (safeCount > 0 ? '<span class="badge green">✅ ' + safeCount + ' safe</span>' : '') + (riskCount > 0 ? '<span class="badge red">⚠️ ' + riskCount + ' at risk</span>' : '') + '</div>';
   }
 
   function renderWeeklyChart() {
-    var chart = document.getElementById('weeklyChart');
-    var totalsEl = document.getElementById('weeklyTotals');
-    if (!chart) return;
-
-    var days = [];
-    var today = new Date();
+    var chart = document.getElementById('weeklyChart'); var totalsEl = document.getElementById('weeklyTotals'); if (!chart) return;
+    var days = []; var today = new Date();
     for (var i = 6; i >= 0; i--) {
-      var d = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i);
-      var key = dateKey(d);
-      var present = 0, bunked = 0;
-      state.history.forEach(function (h) {
-        if (h.date === key) { if (h.present) present++; else bunked++; }
-      });
-      days.push({
-        label: ['S','M','T','W','T','F','S'][d.getDay()],
-        present: present, bunked: bunked, total: present + bunked
-      });
+      var d = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i); var key = dateKey(d); var present = 0, bunked = 0;
+      state.history.forEach(function (h) { if (h.date === key) { if (h.present) present++; else bunked++; } });
+      days.push({ label: ['S','M','T','W','T','F','S'][d.getDay()], present: present, bunked: bunked, total: present + bunked });
     }
-
-    var totalAll = 0;
-    days.forEach(function (d) { totalAll += d.total; });
-
-    if (totalAll === 0) {
-      chart.innerHTML = '<div class="weekly-empty">No activity yet — start marking classes!</div>';
-      if (totalsEl) totalsEl.textContent = '';
-      return;
-    }
-
-    var maxVal = 1;
-    days.forEach(function (d) { if (d.total > maxVal) maxVal = d.total; });
-
-    var H = 64;
-    var html = '';
-    var totalP = 0, totalB = 0;
+    var totalAll = 0; days.forEach(function (d) { totalAll += d.total; });
+    if (totalAll === 0) { chart.innerHTML = '<div class="weekly-empty">No activity yet — start marking classes!</div>'; if (totalsEl) totalsEl.textContent = ''; return; }
+    var maxVal = 1; days.forEach(function (d) { if (d.total > maxVal) maxVal = d.total; });
+    var H = 64; var html = ''; var totalP = 0, totalB = 0;
     days.forEach(function (d) {
-      totalP += d.present; totalB += d.bunked;
-      var pPx = (d.present / maxVal) * H;
-      var bPx = (d.bunked / maxVal) * H;
-      html += '<div class="day-col">';
-      html += '<div class="day-bar">';
-      if (pPx > 0) html += '<div class="bar-present" style="height:' + pPx + 'px"></div>';
-      if (bPx > 0) html += '<div class="bar-bunked" style="height:' + bPx + 'px"></div>';
-      html += '</div>';
-      html += '<div class="day-label">' + d.label + '</div>';
-      html += '</div>';
+      totalP += d.present; totalB += d.bunked; var pPx = (d.present / maxVal) * H; var bPx = (d.bunked / maxVal) * H;
+      html += '<div class="day-col"><div class="day-bar">' + (pPx > 0 ? '<div class="bar-present" style="height:' + pPx + 'px"></div>' : '') + (bPx > 0 ? '<div class="bar-bunked" style="height:' + bPx + 'px"></div>' : '') + '</div><div class="day-label">' + d.label + '</div></div>';
     });
-    chart.innerHTML = html;
-    if (totalsEl) {
-      totalsEl.innerHTML = '<span style="color:var(--mint)">✅ ' + totalP + '</span> · <span style="color:var(--red)">❌ ' + totalB + '</span>';
-    }
+    chart.innerHTML = html; if (totalsEl) totalsEl.innerHTML = '<span style="color:var(--mint)">✅ ' + totalP + '</span> · <span style="color:var(--red)">❌ ' + totalB + '</span>';
   }
 
   function renderSubjects() {
     var el = document.getElementById('subjects');
-    if (state.subjects.length === 0) {
-      el.innerHTML = '<div class="empty-state">No subjects yet.<br>Tap "+ Add Subject" below to start.</div>';
-      return;
-    }
-
+    if (state.subjects.length === 0) { el.innerHTML = '<div class="empty-state">No subjects yet.<br>Tap "+ Add Subject" below to start.</div>'; return; }
     el.innerHTML = state.subjects.map(function (s) {
-      var pct = percent(s.attended, s.total);
-      var isSafe = pct >= state.target;
-      var cls = isSafe ? 'green' : 'red';
-      var barClass = isSafe ? 'bar-green' : 'bar-red';
-      var barWidth = Math.min(100, pct);
-      var markerLeft = Math.min(100, state.target);
-
-      var advice;
-      if (isSafe) {
-        advice = '<span class="green">✅ Can miss ' + safeSkips(s.attended, s.total, state.target) + ' more</span>';
-      } else {
-        advice = '<span class="red">⚠️ Attend ' + classesNeeded(s.attended, s.total, state.target) + ' in a row to recover</span>';
-      }
-
-      return (
-        '<div class="subject-card glass tilt" data-tilt>' +
-          '<div class="subject-header">' +
-            '<div class="subject-name">' + escapeHtml(s.name) + '</div>' +
-            '<button class="delete-btn" onclick="deleteSubject(' + s.id + ')" aria-label="Delete">✕</button>' +
-          '</div>' +
-          '<div class="subject-numbers">' +
-            '<span class="subject-percent ' + cls + '">' + pct.toFixed(1) + '%</span>' +
-            '<span class="subject-count">' + s.attended + ' / ' + s.total + '</span>' +
-          '</div>' +
-          '<div class="progress-bar">' +
-            '<div class="progress-fill ' + barClass + '" style="width:' + barWidth + '%"></div>' +
-            '<div class="target-marker" style="left:' + markerLeft + '%"></div>' +
-          '</div>' +
-          '<div class="subject-advice">' + advice + '</div>' +
-          '<div class="quick-row">' +
-            '<button class="quick-btn green-btn" onclick="quickUpdate(' + s.id + ',1,1,event)">✅ Present</button>' +
-            '<button class="quick-btn red-btn" onclick="quickUpdate(' + s.id + ',0,1,event)">❌ Bunked</button>' +
-          '</div>' +
-          '<div class="whatif">' +
-            '<span>🔮 Skip</span>' +
-            '<input type="number" class="whatif-input" data-id="' + s.id + '" min="0" max="200" value="0" inputmode="numeric" aria-label="Simulate skips">' +
-            '<span>more?</span>' +
-            '<span class="whatif-result" data-id="' + s.id + '"></span>' +
-          '</div>' +
-        '</div>'
-      );
+      var pct = percent(s.attended, s.total); var isSafe = pct >= state.target; var cls = isSafe ? 'green' : 'red'; var barClass = isSafe ? 'bar-green' : 'bar-red';
+      var barWidth = Math.min(100, pct); var markerLeft = Math.min(100, state.target);
+      var advice = isSafe ? '<span class="green">✅ Can miss ' + safeSkips(s.attended, s.total, state.target) + ' more</span>' : '<span class="red">⚠️ Attend ' + classesNeeded(s.attended, s.total, state.target) + ' in a row to recover</span>';
+      return '<div class="subject-card glass tilt" data-tilt><div class="subject-header"><div class="subject-name">' + escapeHtml(s.name) + '</div><button class="delete-btn" onclick="deleteSubject(' + s.id + ')" aria-label="Delete">✕</button></div><div class="subject-numbers"><span class="subject-percent ' + cls + '">' + pct.toFixed(1) + '%</span><span class="subject-count">' + s.attended + ' / ' + s.total + '</span></div><div class="progress-bar"><div class="progress-fill ' + barClass + '" style="width:' + barWidth + '%"></div><div class="target-marker" style="left:' + markerLeft + '%"></div></div><div class="subject-advice">' + advice + '</div><div class="quick-row"><button class="quick-btn green-btn" onclick="quickUpdate(' + s.id + ',1,1,event)">✅ Present</button><button class="quick-btn red-btn" onclick="quickUpdate(' + s.id + ',0,1,event)">❌ Bunked</button></div><div class="whatif"><span>🔮 Skip</span><input type="number" class="whatif-input" data-id="' + s.id + '" min="0" max="200" value="0" inputmode="numeric"><span>more?</span><span class="whatif-result" data-id="' + s.id + '"></span></div></div>';
     }).join('');
   }
 
-  // ========== ACTIONS ==========
   function quickUpdate(id, attDelta, totDelta, evt) {
-    var s = state.subjects.find(function (x) { return x.id === id; });
-    if (!s) return;
-
-    // 🔥 Sync to Supabase Leaderboard
+    var s = state.subjects.find(function (x) { return x.id === id; }); if (!s) return;
     if (window.syncCompletion) window.syncCompletion(s.name, attDelta > 0);
-
     var wasSafe = percent(s.attended, s.total) >= state.target;
-
-    s.attended = Math.max(0, s.attended + attDelta);
-    s.total = s.total + totDelta;
-
-    state.history.push({ date: todayKey(), present: attDelta > 0 });
-    if (state.history.length > 500) state.history = state.history.slice(-500);
-
-    save();
-    render();
-
+    s.attended = Math.max(0, s.attended + attDelta); s.total = s.total + totDelta;
+    state.history.push({ date: todayKey(), present: attDelta > 0 }); if (state.history.length > 500) state.history = state.history.slice(-500);
+    save(); render();
     var isSafe = percent(s.attended, s.total) >= state.target;
-    if (attDelta > 0) {
-      if (!wasSafe && isSafe) soundSafe(); else soundPresent();
-    } else {
-      soundBunked();
-    }
-
+    if (attDelta > 0) { if (!wasSafe && isSafe) soundSafe(); else soundPresent(); } else { soundBunked(); }
     if (evt) burstConfetti(evt.clientX, evt.clientY, attDelta > 0 ? 'green' : 'red');
     if (navigator.vibrate) navigator.vibrate(attDelta > 0 ? 30 : [40, 30, 40]);
   }
 
   function updateWhatIf(id) {
-    var input = document.querySelector('.whatif-input[data-id="' + id + '"]');
-    var result = document.querySelector('.whatif-result[data-id="' + id + '"]');
-    var s = state.subjects.find(function (x) { return x.id === id; });
-    if (!input || !result || !s) return;
-    var skip = parseInt(input.value, 10);
-    if (isNaN(skip) || skip < 0) skip = 0;
-    var newTotal = s.total + skip;
-    var newPct = newTotal > 0 ? (s.attended / newTotal) * 100 : 0;
-    var cls = newPct >= state.target ? 'green' : 'red';
-    var icon = newPct >= state.target ? '✓' : '⚠';
+    var input = document.querySelector('.whatif-input[data-id="' + id + '"]'); var result = document.querySelector('.whatif-result[data-id="' + id + '"]'); var s = state.subjects.find(function (x) { return x.id === id; });
+    if (!input || !result || !s) return; var skip = parseInt(input.value, 10); if (isNaN(skip) || skip < 0) skip = 0;
+    var newTotal = s.total + skip; var newPct = newTotal > 0 ? (s.attended / newTotal) * 100 : 0;
+    var cls = newPct >= state.target ? 'green' : 'red'; var icon = newPct >= state.target ? '✓' : '⚠';
     result.innerHTML = '→ <span class="' + cls + '">' + newPct.toFixed(1) + '% ' + icon + '</span>';
   }
 
-  function deleteSubject(id) {
-    if (!confirm('Delete this subject? This cannot be undone.')) return;
-    state.subjects = state.subjects.filter(function (s) { return s.id !== id; });
-    save();
-    render();
-  }
-
-  function showAddForm() {
-    document.getElementById('addForm').classList.remove('hidden');
-    document.getElementById('newName').focus();
-  }
-  function hideAddForm() {
-    document.getElementById('addForm').classList.add('hidden');
-    document.getElementById('newName').value = '';
-    document.getElementById('newAttended').value = '';
-    document.getElementById('newTotal').value = '';
-  }
+  function deleteSubject(id) { if (!confirm('Delete this subject?')) return; state.subjects = state.subjects.filter(function (s) { return s.id !== id; }); save(); render(); }
+  function showAddForm() { document.getElementById('addForm').classList.remove('hidden'); document.getElementById('newName').focus(); }
+  function hideAddForm() { document.getElementById('addForm').classList.add('hidden'); document.getElementById('newName').value = ''; document.getElementById('newAttended').value = ''; document.getElementById('newTotal').value = ''; }
   function addSubject() {
-    var name = document.getElementById('newName').value.trim();
-    var attended = parseInt(document.getElementById('newAttended').value, 10);
-    var total = parseInt(document.getElementById('newTotal').value, 10);
-    if (!name) { alert('Please enter a subject name.'); return; }
-    if (isNaN(attended) || isNaN(total) || attended < 0 || total < 0) { alert('Please enter valid numbers.'); return; }
-    if (attended > total) { alert('Attended cannot be more than total held.'); return; }
-    if (total === 0) { alert('Total held must be at least 1.'); return; }
-
-    state.subjects.push({
-      id: Date.now() + Math.floor(Math.random() * 1000),
-      name: name, attended: attended, total: total
-    });
-    save();
-    hideAddForm();
-    render();
-    soundPresent();
+    var name = document.getElementById('newName').value.trim(); var attended = parseInt(document.getElementById('newAttended').value, 10); var total = parseInt(document.getElementById('newTotal').value, 10);
+    if (!name) { alert('Enter subject name.'); return; } if (isNaN(attended) || isNaN(total) || attended < 0 || total < 0) { alert('Enter valid numbers.'); return; } if (attended > total) { alert('Attended > Total is invalid.'); return; } if (total === 0) { alert('Total must be at least 1.'); return; }
+    state.subjects.push({ id: Date.now() + Math.floor(Math.random() * 1000), name: name, attended: attended, total: total }); save(); hideAddForm(); render(); soundPresent();
   }
 
   function showAbout() { document.getElementById('aboutModal').classList.add('show'); }
   function hideAbout() { document.getElementById('aboutModal').classList.remove('show'); }
 
-  // ========== TARGET INPUT ==========
   var targetInput = document.getElementById('targetInput');
-  targetInput.addEventListener('input', function (e) {
-    var v = parseInt(e.target.value, 10);
-    if (v >= 1 && v <= 99) {
-      state.target = v;
-      save();
-      render();
-    }
-  });
+  targetInput.addEventListener('input', function (e) { var v = parseInt(e.target.value, 10); if (v >= 1 && v <= 99) { state.target = v; save(); render(); } });
+  targetInput.addEventListener('blur', function(e) { var v = parseInt(e.target.value, 10); if (isNaN(v) || v < 1 || v > 99) { state.target = 75; targetInput.value = 75; save(); render(); } });
 
-  // ========== WHAT IF DELEGATION ==========
-  document.getElementById('subjects').addEventListener('input', function (e) {
-    if (e.target.classList.contains('whatif-input')) {
-      var id = parseInt(e.target.getAttribute('data-id'), 10);
-      updateWhatIf(id);
-    }
-  });
+  document.getElementById('subjects').addEventListener('input', function (e) { if (e.target.classList.contains('whatif-input')) { var id = parseInt(e.target.getAttribute('data-id'), 10); updateWhatIf(id); } });
 
-  // ========== 3D TILT ==========
   function attachTilt() {
     document.querySelectorAll('[data-tilt]').forEach(function (card) {
-      if (card._tiltBound) return;
-      card._tiltBound = true;
+      if (card._tiltBound) return; card._tiltBound = true;
       function onMove(e) {
-        var rect = card.getBoundingClientRect();
-        var x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-        var y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
-        var cx = rect.width / 2, cy = rect.height / 2;
-        var rotX = ((y - cy) / cy) * -6;
-        var rotY = ((x - cx) / cx) * 6;
-        card.style.transform = 'perspective(900px) rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg)';
+        var rect = card.getBoundingClientRect(); var x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left; var y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top; var cx = rect.width / 2, cy = rect.height / 2;
+        card.style.transform = 'perspective(900px) rotateX(' + (((y - cy) / cy) * -6) + 'deg) rotateY(' + (((x - cx) / cx) * 6) + 'deg)';
       }
-      function onLeave() {
-        card.style.transform = 'perspective(900px) rotateX(0) rotateY(0)';
-      }
-      card.addEventListener('mousemove', onMove);
-      card.addEventListener('mouseleave', onLeave);
-      card.addEventListener('touchmove', onMove, { passive: true });
-      card.addEventListener('touchend', onLeave);
+      function onLeave() { card.style.transform = 'perspective(900px) rotateX(0) rotateY(0)'; }
+      card.addEventListener('mousemove', onMove); card.addEventListener('mouseleave', onLeave); card.addEventListener('touchmove', onMove, { passive: true }); card.addEventListener('touchend', onLeave);
     });
   }
 
-  // ========== PARTICLES ==========
   function spawnParticles() {
-    var wrap = document.getElementById('particles');
-    if (!wrap) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var wrap = document.getElementById('particles'); if (!wrap) return; if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     var colors = ['#38bdf8', '#7c3aed', '#2dffb3', '#ff9f1c', '#ff4d6d'];
     for (var i = 0; i < 22; i++) {
-      var p = document.createElement('div');
-      p.className = 'particle';
-      var size = Math.random() * 4 + 2;
-      var color = colors[Math.floor(Math.random() * colors.length)];
-      p.style.width = size + 'px';
-      p.style.height = size + 'px';
-      p.style.left = Math.random() * 100 + '%';
-      p.style.bottom = '-10px';
-      p.style.background = color;
-      p.style.boxShadow = '0 0 10px 2px ' + color;
-      p.style.opacity = '0';
-      p.style.animationDuration = (Math.random() * 12 + 10) + 's';
-      p.style.animationDelay = (Math.random() * 12) + 's';
+      var p = document.createElement('div'); p.className = 'particle'; var size = Math.random() * 4 + 2; var color = colors[Math.floor(Math.random() * colors.length)];
+      p.style.width = size + 'px'; p.style.height = size + 'px'; p.style.left = Math.random() * 100 + '%'; p.style.bottom = '-10px'; p.style.background = color; p.style.boxShadow = '0 0 10px 2px ' + color; p.style.opacity = '0'; p.style.animationDuration = (Math.random() * 12 + 10) + 's'; p.style.animationDelay = (Math.random() * 12) + 's';
       wrap.appendChild(p);
     }
   }
 
-  // ========== CONFETTI ==========
   function burstConfetti(x, y, type) {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    var colors = type === 'green'
-      ? ['#2dffb3', '#22c55e', '#38bdf8']
-      : ['#ff4d6d', '#ef4444', '#ff9f1c'];
+    var colors = type === 'green' ? ['#2dffb3', '#22c55e', '#38bdf8'] : ['#ff4d6d', '#ef4444', '#ff9f1c'];
     for (var i = 0; i < 14; i++) {
-      var el = document.createElement('div');
-      el.className = 'confetti-piece';
-      var angle = Math.random() * Math.PI * 2;
-      var dist = 60 + Math.random() * 90;
-      el.style.left = x + 'px';
-      el.style.top = y + 'px';
-      el.style.background = colors[Math.floor(Math.random() * colors.length)];
-      el.style.setProperty('--dx', (Math.cos(angle) * dist) + 'px');
-      el.style.setProperty('--dy', (Math.sin(angle) * dist - 30) + 'px');
-      el.style.setProperty('--rot', (Math.random() * 720 - 360) + 'deg');
-      el.style.animationDelay = (i * 15) + 'ms';
-      document.body.appendChild(el);
-      (function (node) {
-        setTimeout(function () { if (node.parentNode) node.remove(); }, 1100);
-      })(el);
+      var el = document.createElement('div'); el.className = 'confetti-piece'; var angle = Math.random() * Math.PI * 2; var dist = 60 + Math.random() * 90;
+      el.style.left = x + 'px'; el.style.top = y + 'px'; el.style.background = colors[Math.floor(Math.random() * colors.length)];
+      el.style.setProperty('--dx', (Math.cos(angle) * dist) + 'px'); el.style.setProperty('--dy', (Math.sin(angle) * dist - 30) + 'px'); el.style.setProperty('--rot', (Math.random() * 720 - 360) + 'deg'); el.style.animationDelay = (i * 15) + 'ms';
+      document.body.appendChild(el); (function (node) { setTimeout(function () { if (node.parentNode) node.remove(); }, 1100); })(el);
     }
   }
 
-  // ========== PWA INSTALL ==========
   var deferredPrompt = null;
-  window.addEventListener('beforeinstallprompt', function (e) {
-    e.preventDefault();
-    deferredPrompt = e;
-    document.getElementById('installBtn').style.display = 'flex';
-    document.getElementById('installBtn').classList.add('pulse');
-  });
-  function promptInstall() {
-    if (!deferredPrompt) return;
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then(function (choice) {
-      if (choice.outcome === 'accepted') {
-        document.getElementById('installBtn').style.display = 'none';
-      }
-      deferredPrompt = null;
-    });
-  }
-  window.addEventListener('appinstalled', function () {
-    document.getElementById('installBtn').style.display = 'none';
-  });
+  window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferredPrompt = e; document.getElementById('installBtn').style.display = 'flex'; });
+  function promptInstall() { if (!deferredPrompt) return; deferredPrompt.prompt(); deferredPrompt.userChoice.then(function (choice) { if (choice.outcome === 'accepted') document.getElementById('installBtn').style.display = 'none'; deferredPrompt = null; }); }
 
-  // ========== SERVICE WORKER ==========
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function () {
-      navigator.serviceWorker.register('sw.js').catch(function () {});
-    });
-  }
+  if ('serviceWorker' in navigator) { window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); }); }
 
-  // ========== SUPABASE SYNC (anti-cheat) ==========
-  var _sb = null;
-  var _syncQueueKey = 'bunkbuddy_syncq';
-
+  var _sb = null; var _syncQueueKey = 'bunkbuddy_syncq';
   (function initSupabase() {
-    if (!window.SUPABASE_URL || window.SUPABASE_URL === 'YOUR_URL') return;
-    if (typeof window.supabase === 'undefined') return;
+    if (!window.SUPABASE_URL || window.SUPABASE_URL === 'YOUR_URL' || typeof window.supabase === 'undefined') return;
     try {
       _sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_KEY);
       _sb.auth.getSession().then(function (res) {
-        if (!res.data.session) {
-          _sb.auth.signInAnonymously().then(function (r) {
-            if (r.data && r.data.user) ensureProfile(r.data.user.id);
-          }).catch(function () {});
-        } else {
-          ensureProfile(res.data.session.user.id);
-        }
+        if (!res.data.session) { _sb.auth.signInAnonymously().then(function (r) { if (r.data && r.data.user) ensureProfile(r.data.user.id); }).catch(function () {}); }
+        else { ensureProfile(res.data.session.user.id); }
       }).then(function () { flushSyncQueue(); }).catch(function () {});
     } catch (e) { }
   })();
 
-  function ensureProfile(uid) {
-    if (!_sb) return;
-    _sb.from('profiles').upsert({ id: uid }).then(function () {}).catch(function () {});
-  }
-
+  function ensureProfile(uid) { if (_sb) _sb.from('profiles').upsert({ id: uid }).then(function () {}).catch(function () {}); }
   function flushSyncQueue() {
-    if (!_sb) return;
-    var q;
-    try { q = JSON.parse(localStorage.getItem(_syncQueueKey) || '[]'); } catch (e) { return; }
-    if (!q.length) return;
-    var remaining = [];
-    var i = 0;
+    if (!_sb) return; var q; try { q = JSON.parse(localStorage.getItem(_syncQueueKey) || '[]'); } catch (e) { return; }
+    if (!q.length) return; var remaining = []; var i = 0;
     function next() {
-      if (i >= q.length) {
-        localStorage.setItem(_syncQueueKey, JSON.stringify(remaining));
-        return;
-      }
+      if (i >= q.length) { localStorage.setItem(_syncQueueKey, JSON.stringify(remaining)); return; }
       var item = q[i++];
-      _sb.rpc('record_completion', { p_subject: item.subject, p_present: item.present })
-        .then(function (r) {
-          if (r.error) remaining.push(item);
-          setTimeout(next, 400);
-        }).catch(function () { remaining.push(item); setTimeout(next, 400); });
+      _sb.rpc('record_completion', { p_subject: item.subject, p_present: item.present }).then(function (r) { if (r.error) remaining.push(item); setTimeout(next, 400); }).catch(function () { remaining.push(item); setTimeout(next, 400); });
     }
     next();
   }
-
   window.syncCompletion = function (subject, present) {
-    if (!_sb) {
-      try {
-        var q = JSON.parse(localStorage.getItem(_syncQueueKey) || '[]');
-        q.push({ subject: subject, present: present, t: Date.now() });
-        localStorage.setItem(_syncQueueKey, JSON.stringify(q));
-      } catch (e) {}
-      return;
-    }
-    _sb.rpc('record_completion', { p_subject: subject, p_present: present })
-      .then(function (r) {
-        if (r.error) {
-          try {
-            var q = JSON.parse(localStorage.getItem(_syncQueueKey) || '[]');
-            q.push({ subject: subject, present: present, t: Date.now() });
-            localStorage.setItem(_syncQueueKey, JSON.stringify(q));
-          } catch (e) {}
-        }
-      }).catch(function () {
-        try {
-          var q = JSON.parse(localStorage.getItem(_syncQueueKey) || '[]');
-          q.push({ subject: subject, present: present, t: Date.now() });
-          localStorage.setItem(_syncQueueKey, JSON.stringify(q));
-        } catch (e) {}
-      });
+    if (!_sb) { try { var q = JSON.parse(localStorage.getItem(_syncQueueKey) || '[]'); q.push({ subject: subject, present: present, t: Date.now() }); localStorage.setItem(_syncQueueKey, JSON.stringify(q)); } catch (e) {} return; }
+    _sb.rpc('record_completion', { p_subject: subject, p_present: present }).catch(function () { try { var q = JSON.parse(localStorage.getItem(_syncQueueKey) || '[]'); q.push({ subject: subject, present: present, t: Date.now() }); localStorage.setItem(_syncQueueKey, JSON.stringify(q)); } catch (e) {} });
   };
 
-  // ========== INIT ==========
-  load();
-  applyTheme();
-  targetInput.value = state.target;
-  document.getElementById('soundBtn').textContent = state.sound ? '🔊' : '🔇';
-  document.getElementById('soundBtn').classList.toggle('active', state.sound);
-  render();
-  spawnParticles();
+  load(); applyTheme(); targetInput.value = state.target; document.getElementById('soundBtn').textContent = state.sound ? '🔊' : '🔇'; render(); spawnParticles();
 </script>
 </body>
 </html>
