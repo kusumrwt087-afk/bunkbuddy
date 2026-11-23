@@ -10,29 +10,25 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
   
   <style>
-    /* CSS (पिछले वाले जैसा ही है, थोड़ा सा अपडेटेड) */
-    :root, [data-theme="dark"] { --bg: #050510; --card: rgba(20, 25, 45, 0.65); --text: #e2e8f0; --text-dim: #94a3b8; --accent: #38bdf8; --purple: #7c3aed; --mint: #2dffb3; --red: #ff4d6d; --border: rgba(56, 189, 248, 0.18); --shadow: rgba(0,0,0,0.5); --input-bg: rgba(5,5,16,0.7); --grid-line: rgba(124, 58, 237, 0.35); }
-    [data-theme="light"] { --bg: #eef2f7; --card: rgba(255, 255, 255, 0.85); --text: #0f172a; --text-dim: #475569; --accent: #0284c7; --purple: #6d28d9; --mint: #059669; --red: #dc2626; --border: rgba(2, 132, 199, 0.25); --shadow: rgba(15,23,42,0.15); --input-bg: rgba(255,255,255,0.9); --grid-line: rgba(109, 40, 217, 0.2); }
+    :root, [data-theme="dark"] { --bg: #050510; --card: rgba(20, 25, 45, 0.65); --text: #e2e8f0; --text-dim: #94a3b8; --accent: #38bdf8; --purple: #7c3aed; --mint: #2dffb3; --red: #ff4d6d; --border: rgba(56, 189, 248, 0.18); --shadow: rgba(0,0,0,0.5); --input-bg: rgba(5,5,16,0.7); }
+    [data-theme="light"] { --bg: #eef2f7; --card: rgba(255, 255, 255, 0.85); --text: #0f172a; --text-dim: #475569; --accent: #0284c7; --purple: #6d28d9; --mint: #059669; --red: #dc2626; --border: rgba(2, 132, 199, 0.25); --shadow: rgba(15,23,42,0.15); --input-bg: rgba(255,255,255,0.9); }
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.5; position: relative; transition: background 0.4s; }
-    .bg-layer { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
-    .bg-radial { position: absolute; inset: 0; background: radial-gradient(circle at 20% 10%, rgba(124, 58, 237, 0.25), transparent 45%), radial-gradient(circle at 80% 90%, rgba(56, 189, 248, 0.22), transparent 50%); }
+    body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.5; position: relative; }
+    .bg-layer { position: fixed; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(circle at 20% 10%, rgba(124, 58, 237, 0.25), transparent 45%), radial-gradient(circle at 80% 90%, rgba(56, 189, 248, 0.22), transparent 50%); }
     .app { max-width: 480px; margin: 0 auto; padding: 16px; position: relative; z-index: 1; }
     
     header { display: flex; align-items: center; gap: 8px; padding: 14px 4px 10px; flex-wrap: nowrap; }
-    .logo-cube { width: 36px; height: 36px; position: relative; transform-style: preserve-3d; animation: cubeSpin 8s linear infinite; flex-shrink: 0; }
-    .logo-cube div { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 900; color: #050510; border: 1px solid rgba(56,189,248,0.7); background: linear-gradient(135deg, #38bdf8, #7c3aed); }
-    .logo-cube .f1 { transform: translateZ(18px); } .logo-cube .f2 { transform: rotateY(180deg) translateZ(18px); } .logo-cube .f3 { transform: rotateY(90deg) translateZ(18px); } .logo-cube .f4 { transform: rotateY(-90deg) translateZ(18px); } .logo-cube .f5 { transform: rotateX(90deg) translateZ(18px); } .logo-cube .f6 { transform: rotateX(-90deg) translateZ(18px); }
-    @keyframes cubeSpin { 0% { transform: rotateX(-18deg) rotateY(0deg); } 100% { transform: rotateX(-18deg) rotateY(360deg); } }
     .brand { flex: 1; min-width: 0; }
     .brand h1 { font-size: 16px; font-weight: 800; background: linear-gradient(90deg, var(--accent), var(--purple), var(--mint)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-    .header-buttons { display: flex; gap: 4px; flex-shrink: 0; }
-    .icon-btn { background: var(--card); border: 1px solid var(--border); color: var(--text); width: 30px; height: 30px; border-radius: 50%; font-size: 12px; display: flex; align-items: center; justify-content: center; text-decoration: none; }
+    .header-buttons { display: flex; gap: 4px; }
+    .icon-btn { background: var(--card); border: 1px solid var(--border); color: var(--text); height: 32px; padding: 0 12px; border-radius: 20px; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center; cursor: pointer; }
     
-    /* 🔥 नया: स्ट्रीक और कॉइन्स का बार */
+    .auth-box { background: rgba(56,189,248,0.1); border: 1px solid var(--accent); border-radius: 12px; padding: 12px; margin-bottom: 14px; display: flex; justify-content: space-between; align-items: center; }
+    .auth-box p { font-size: 13px; font-weight: 600; }
+    .google-btn { background: #fff; color: #000; border: none; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px; cursor: pointer; }
+
     .stats-banner { display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, rgba(56,189,248,0.1), rgba(124,58,237,0.1)); border: 1px solid var(--border); border-radius: 14px; padding: 10px 16px; margin-bottom: 14px; }
     .stat-item { display: flex; align-items: center; gap: 6px; font-size: 15px; font-weight: 800; }
-    .stat-item span { font-size: 18px; }
 
     .glass { background: var(--card); backdrop-filter: blur(14px); border: 1px solid var(--border); border-radius: 18px; box-shadow: 0 8px 32px var(--shadow); position: relative; }
     .summary { padding: 22px 20px; margin-bottom: 14px; text-align: center; }
@@ -44,8 +40,7 @@
     .settings-row label { font-size: 14px; font-weight: 600; flex: 1; }
     .settings-row input { width: 76px; padding: 8px; border-radius: 10px; border: 1px solid var(--border); background: var(--input-bg); color: var(--accent); font-size: 16px; font-weight: 800; text-align: center; outline: none; }
 
-    .subject-card { padding: 18px; margin-bottom: 14px; animation: cardIn 0.4s ease; }
-    @keyframes cardIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    .subject-card { padding: 18px; margin-bottom: 14px; }
     .subject-header { display: flex; justify-content: space-between; margin-bottom: 12px; }
     .subject-name { font-size: 17px; font-weight: 800; }
     .delete-btn { background: rgba(255,77,109,0.1); border: none; color: var(--red); padding: 6px 10px; border-radius: 8px; font-weight: 700; }
@@ -74,27 +69,30 @@
 </head>
 <body>
 
-<div class="bg-layer"><div class="bg-radial"></div></div>
+<div class="bg-layer"></div>
 
 <div class="app">
   <header>
-    <div class="logo-cube"><div class="f1">B</div><div class="f2">🎓</div><div class="f3">B</div><div class="f4">⚡</div><div class="f5">B</div><div class="f6">✨</div></div>
     <div class="brand"><h1>BunkBuddy</h1></div>
     <div class="header-buttons">
-      <button class="icon-btn" id="installBtn" onclick="promptInstall()" style="display:none">⬇</button>
       <button class="icon-btn" id="soundBtn" onclick="toggleSound()">🔊</button>
       <button class="icon-btn" id="themeBtn" onclick="toggleTheme()">☀️</button>
-      <button class="icon-btn" onclick="showAbout()">?</button>
     </div>
   </header>
 
-  <!-- 🔥 नया स्टैट्स बार (स्ट्रीक + कॉइन्स) -->
+  <!-- 🔥 Google Login Area -->
+  <div class="auth-box" id="authBox">
+    <p id="authText">Save your XP & Streaks!</p>
+    <button class="google-btn" id="googleBtn" onclick="loginWithGoogle()">
+      <img src="https://www.svgrepo.com/show/475656/google-color.svg" width="14" height="14"> Login
+    </button>
+  </div>
+
   <div class="stats-banner" id="statsBanner" style="display:none;">
     <div class="stat-item"><span>🔥</span> <span id="uiStreak">0</span> Day Streak</div>
     <div class="stat-item"><span>🪙</span> <span id="uiCoins">0</span></div>
   </div>
 
-  <!-- Leaderboard बटन -->
   <a href="leaderboard.html" style="display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:14px;margin-bottom:14px;background:linear-gradient(135deg, rgba(124, 58, 237, 0.2), rgba(56, 189, 248, 0.2));border:1px solid var(--accent);border-radius:16px;color:var(--text);text-decoration:none;font-weight:800;">
     🏆 Global & Squad Leaderboard
   </a>
@@ -122,7 +120,6 @@
 </div>
 
 <script>
-  // ====== लोकल स्टेट (तुम्हारा डेटा फोन में सेव रहेगा) ======
   var state = { target: 75, sound: true, theme: 'dark', subjects: [], userStreak: 0, userCoins: 0 };
   
   function save() { localStorage.setItem('bunkbuddy_state', JSON.stringify(state)); }
@@ -135,20 +132,17 @@
     document.getElementById('soundBtn').textContent = state.sound ? '🔊' : '🔇';
   }
 
-  // ====== कैलकुलेशन लॉजिक ======
   function percent(a, t) { return t > 0 ? (a / t) * 100 : 0; }
   function safeSkips(a, t, tgt) { return percent(a,t) >= tgt ? Math.max(0, Math.floor((a*100)/tgt) - t) : 0; }
   function classesNeeded(a, t, tgt) { return percent(a,t) < tgt ? Math.max(1, Math.ceil((tgt*t - 100*a) / (100-tgt))) : 0; }
 
   function render() {
-    // 1. Render Stats (स्ट्रीक और कॉइन)
     if (state.userStreak > 0 || state.userCoins > 0) {
       document.getElementById('statsBanner').style.display = 'flex';
       document.getElementById('uiStreak').textContent = state.userStreak;
       document.getElementById('uiCoins').textContent = state.userCoins;
     }
 
-    // 2. Render Summary
     var el = document.getElementById('summary');
     if (state.subjects.length === 0) {
       el.innerHTML = '<div class="summary-label">Welcome</div><div class="summary-percent" style="color:var(--text-dim)">—</div><div style="font-size:13px;color:var(--text-dim)">Add your first subject</div>';
@@ -159,7 +153,6 @@
       el.innerHTML = '<div class="summary-label">Overall Attendance</div><div class="summary-percent ' + cls + '">' + pct.toFixed(1) + '%</div><div style="font-size:13px;color:var(--text-dim)">' + att + ' of ' + tot + ' classes attended</div>';
     }
 
-    // 3. Render Subjects
     var subEl = document.getElementById('subjects');
     if (state.subjects.length === 0) { subEl.innerHTML = '<div class="empty-state">No subjects yet.</div>'; return; }
     
@@ -172,13 +165,11 @@
     }).join('');
   }
 
-  // ====== एक्शन्स ======
   function updateSubject(id, attD, totD) {
     var s = state.subjects.find(x => x.id === id);
     if (!s) return;
     s.attended += attD; s.total += totD;
     save(); render();
-    // Supabase को सिंक करो
     if (window.syncCompletion) window.syncCompletion(s.name, attD > 0);
   }
   function delSub(id) { if(confirm('Delete?')) { state.subjects = state.subjects.filter(x => x.id !== id); save(); render(); } }
@@ -196,20 +187,60 @@
   function toggleSound() { state.sound = !state.sound; document.getElementById('soundBtn').textContent = state.sound ? '🔊' : '🔇'; save(); }
   function toggleTheme() { state.theme = state.theme === 'dark' ? 'light' : 'dark'; document.documentElement.setAttribute('data-theme', state.theme); document.getElementById('themeBtn').textContent = state.theme === 'dark' ? '☀️' : '🌙'; save(); }
 
-  // ====== Supabase सिंक + स्ट्रीक अपडेट ======
+  // ====== Supabase Auth & Sync ======
   var _sb = null;
+  
   (function initSupabase() {
     if (!window.SUPABASE_URL || window.SUPABASE_URL === 'YOUR_URL') return;
     _sb = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_KEY);
+    
+    // चेक करो कि यूज़र पहले से लॉगिन है या नहीं
     _sb.auth.getSession().then(function (res) {
-      if (!res.data.session) _sb.auth.signInAnonymously().then(r => { if(r.data.user) getProfile(r.data.user.id); });
-      else getProfile(res.data.session.user.id);
+      if (res.data.session) {
+        updateAuthUI(res.data.session.user);
+        getProfile(res.data.session.user.id);
+      } else {
+        // अगर लॉगिन नहीं है, तो चुपचाप Anonymous लॉगिन करो ताकि गेम खेल सके
+        _sb.auth.signInAnonymously().then(r => { if(r.data.user) getProfile(r.data.user.id); });
+      }
+    });
+
+    // जब भी लॉगिन/लॉगआउट हो, UI अपडेट करो
+    _sb.auth.onAuthStateChange((event, session) => {
+      if (session) {
+        updateAuthUI(session.user);
+        getProfile(session.user.id);
+      }
     });
   })();
 
+  function updateAuthUI(user) {
+    var isAnon = !user.email;
+    if (isAnon) {
+      document.getElementById('authText').textContent = "⚠️ Save your progress!";
+      document.getElementById('googleBtn').innerHTML = '<img src="https://www.svgrepo.com/show/475656/google-color.svg" width="14" height="14"> Login';
+    } else {
+      document.getElementById('authText').textContent = "👤 " + (user.user_metadata.full_name || user.email.split('@')[0]);
+      document.getElementById('googleBtn').innerHTML = 'Logout';
+      document.getElementById('googleBtn').onclick = logout;
+    }
+  }
+
+  function loginWithGoogle() {
+    _sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.href } });
+  }
+
+  function logout() {
+    _sb.auth.signOut().then(() => { window.location.reload(); });
+  }
+
   function getProfile(uid) {
-    _sb.from('profiles').select('streak, coins').eq('id', uid).single().then(function(r) {
-      if (r.data) { state.userStreak = r.data.streak || 0; state.userCoins = r.data.coins || 0; render(); }
+    _sb.from('profiles').select('streak, coins, display_name').eq('id', uid).single().then(function(r) {
+      if (r.data) { 
+        state.userStreak = r.data.streak || 0; 
+        state.userCoins = r.data.coins || 0; 
+        render(); 
+      }
     });
   }
 
@@ -217,7 +248,6 @@
     if (!_sb) return;
     _sb.rpc('record_completion', { p_subject: subject, p_present: present }).then(function (r) {
       if (r.data && r.data.ok) {
-        // सर्वर से नया स्ट्रीक और कॉइन्स आया, उसे UI में दिखाओ
         state.userStreak = r.data.streak;
         state.userCoins = r.data.coins;
         save(); render();
@@ -225,7 +255,6 @@
     });
   };
 
-  // Init
   load(); render();
 </script>
 </body>
